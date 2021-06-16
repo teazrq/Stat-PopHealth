@@ -17,4 +17,4 @@ output:
 
 ## Welcome!
 
-This the website for Statistical lectures and R examples of the __*Foundations: Molecules to Populations*__ course at Carle Illinois College of Medicine. The lectures are given at each 
+This the website for Statistical lectures and R examples of the __*Foundations: Molecules to Populations*__ course at Carle Illinois College of Medicine. The lectures are given at each Wednesday morning. 
