@@ -18,5 +18,5 @@ navbar:
       href: https://sites.google.com/site/teazrq/
 output:
   html_document:
-    theme: cosmo
+    theme: cerulean
     highlight: textmate
