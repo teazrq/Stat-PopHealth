@@ -1,0 +1,22 @@
+name: "Statistics in Population Health"
+navbar:
+  title: "STAT"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Lecture Notes"
+      icon: fa-book
+      menu:
+        - text: "Week 1" 
+          href: week1.html
+        - text: "Week 2"
+          href: week2.html
+  right:
+    - icon: fab-github fa-lg
+      href: http://github.com/teazrq
+    - icon: fab-google fa-lg
+      href: https://sites.google.com/site/teazrq/
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate

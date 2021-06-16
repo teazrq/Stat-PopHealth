@@ -1,0 +1,20 @@
+---
+title: "Welcome"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+author: "[Ruoqing Zhu](https://sites.google.com/site/teazrq/home){target='_blank'}"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+fontsize: 12pt
+output: 
+  html_document:
+    includes:
+      in_header: "favicon.html"
+---
+
+
+## Welcome!
+
+This the website for Statistical lectures and R examples of the __*Foundations: Molecules to Populations*__ course at Carle Illinois College of Medicine. The lectures are given at each 

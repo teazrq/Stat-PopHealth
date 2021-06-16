@@ -1,0 +1,15 @@
+---
+title: "Week 1: Intro"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'Week1.html'))})
+date: "Last Updated: `r format(Sys.time(), '%B %e, %Y')`"
+fontsize: 12pt
+output: 
+  html_document:
+    includes:
+      in_header: "favicon.html"
+---
+
