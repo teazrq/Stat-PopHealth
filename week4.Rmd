@@ -1,0 +1,31 @@
+---
+title: "Week 4: TBL: Correlation and Linear Regression"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'week4.html'))})
+date: "Last Updated: `r format(Sys.time(), '%B %e, %Y')`"
+fontsize: 12pt
+output: 
+  html_document:
+    includes:
+      in_header: "favicon.html"
+---
+
+## Weekly Objectives
+  
+  * Independence and uncorrelated
+  * Pearson correlation
+  * Positive and negative correlation
+  * Perform correlation calculation in R
+  * Philosophy of linear regression
+  * Interpretation of parameters
+  * Testing for significance of parameter ($t$-test)
+  * Testing for overall significance ($F$-test)
+  * Perform linear regression in R
+  * Model evaluation criteria
+  
+## Lecture Note
+
+## R Examples

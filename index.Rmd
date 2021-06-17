@@ -1,11 +1,11 @@
 ---
-title: "Welcome"
+title: "Welcome, Class of 2025!"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
  encoding=encoding,
  output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
-author: "[Ruoqing Zhu](https://sites.google.com/site/teazrq/home){target='_blank'}"
+author: "Ruoqing Zhu, Ph.D"
 date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
 fontsize: 12pt
 output: 
@@ -14,7 +14,15 @@ output:
       in_header: "favicon.html"
 ---
 
+This website provides lectures and R examples for the Statistical components in the __*Foundations: Molecules to Populations*__ course at the Carle Illinois College of Medicine. The lectures are given at each Wednesday morning. 
 
-## Welcome!
+## Weekly Schedule
 
-This the website for Statistical lectures and R examples of the __*Foundations: Molecules to Populations*__ course at Carle Illinois College of Medicine. The lectures are given at each Wednesday morning. 
+  * __Week 1 (July 7)__: [History and Scope of Statistics](week1.html)
+  * __Week 2 (July 14)__: [R Intro and Basic Statistics](week2.html)
+  * __Week 3 (July 21)__: [Testing Mean Differences and Associations](week3.html)
+  * __Week 4 (July 28)__: [TBL - Correlation and Linear Regression](week4.html)
+  * __Week 5 (Aug 4)__: [TBL - Classification and Logistic Regression](week5.html)
+  * __Week 6 (Aug 11)__: [Survival Analysis and Beyond](week6.html)
+  
+## Announcements

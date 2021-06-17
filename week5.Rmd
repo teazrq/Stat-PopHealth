@@ -1,0 +1,31 @@
+---
+title: "Week 5: TBL: Classification and Logistic Regression"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'week5.html'))})
+date: "Last Updated: `r format(Sys.time(), '%B %e, %Y')`"
+fontsize: 12pt
+output: 
+  html_document:
+    includes:
+      in_header: "favicon.html"
+---
+
+## Weekly Objectives
+  
+  * Binary variables and Bernoulli distribution
+  * Model the probability of a binary variable
+  * The logistic link
+  * Logistic regression
+  * Interpreting parameters in a logistic regression
+  * Testing the significance of a variable
+  * Performing logistic regression in R
+  * Measuring the model accuracy
+  * The ROC curve and area under the curve (AUC)
+  * Dealing with categorical predictors
+
+## Lecture Note
+
+## R Examples

@@ -1,21 +1,41 @@
 name: "Statistics in Population Health"
 navbar:
-  title: "STAT"
+  title: "Statistics"
   left:
     - text: "Home"
+      icon: fa-bars
       href: index.html
     - text: "Lecture Notes"
       icon: fa-book
       menu:
-        - text: "Week 1" 
-          href: week1.html
-        - text: "Week 2"
-          href: week2.html
+          - text: "Week 1: History and Scope of Statistics"
+            icon: fa-bookmark
+            href: week1.html
+          - text: "Week 2: R Intro and Basic Statistics"
+            icon: fa-bookmark
+            href: week2.html
+          - text: "Week 3: Testing Mean Differences and Associations"
+            icon: fa-bookmark
+            href: week3.html
+          - text: "Week 4: TBL: Correlation and Linear Regression"
+            icon: fa-bookmark
+            href: week4.html
+          - text: "Week 5: TBL: Classification and Logistic Regression"
+            icon: fa-bookmark
+            href: week5.html
+          - text: "Week 6: Survival Analysis and Beyond"
+            icon: fa-bookmark
+            href: week6.html
+    - text: "Additional Resources" 
+      icon: fa-info-circle
+      href: info.html
   right:
-    - icon: fab-github fa-lg
-      href: http://github.com/teazrq
-    - icon: fab-google fa-lg
-      href: https://sites.google.com/site/teazrq/
+    - icon: fa-university fa-lg
+      href: https://medicine.illinois.edu
+    - icon: fa-github fa-lg
+      href: https://github.com/teazrq
+    - icon: fa-google fa-lg
+      href: https://sites.google.com/site/teazrq
 output:
   html_document:
     theme: cerulean

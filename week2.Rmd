@@ -1,5 +1,5 @@
 ---
-title: "Week 2"
+title: "Week 2: R Intro and Basic Statistics"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
@@ -13,3 +13,15 @@ output:
       in_header: "favicon.html"
 ---
 
+## Weekly Objectives
+
+  * Install R and R Studio
+  * Install R packages
+  * Load and save data using Excel
+  * Using and writing R functions
+  * Calculate summary statistics
+  * Generate random numbers and set random seed
+  
+## Lecture Note
+
+## R Examples

@@ -1,0 +1,37 @@
+---
+title: "Week 3: Testing Mean Differences and Associations"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'week3.html'))})
+date: "Last Updated: `r format(Sys.time(), '%B %e, %Y')`"
+fontsize: 12pt
+output: 
+  html_document:
+    includes:
+      in_header: "favicon.html"
+---
+
+## Weekly Objectives
+
+We will review
+
+  * Philosophy of Statistical hypothesis test
+  * Type I and Type II errors
+  * Statistical power
+  
+New objectives
+
+  * One and two sample $z$-tests
+  * One and two sample $t$-tests
+  * t-distribution
+  * One sided and two sided tests
+  * Contingency tables
+  * Fisher's exact test   
+  * Chi-square $(\chi^2)$ distribution
+  * Chi-Square test for independence
+  
+## Lecture Note
+
+## R Examples

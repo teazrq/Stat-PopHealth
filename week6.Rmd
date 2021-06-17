@@ -1,0 +1,27 @@
+---
+title: "Week 6: Survival Analysis and Beyond"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'week6.html'))})
+date: "Last Updated: `r format(Sys.time(), '%B %e, %Y')`"
+fontsize: 12pt
+output: 
+  html_document:
+    includes:
+      in_header: "favicon.html"
+---
+
+## Weekly Objectives
+  
+  * Right-censored survival outcomes
+  * Survival function and hazard function
+  * Log-rank test for two groups of samples
+  * Cox proportional hazard model
+  * Machine learning vs. Statistics
+  * Some popular machine learning models
+  
+## Lecture Note
+
+## R Examples

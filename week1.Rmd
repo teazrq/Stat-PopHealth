@@ -1,5 +1,5 @@
 ---
-title: "Week 1: Intro"
+title: "Week 1: History and Scope of Statistics"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
@@ -13,3 +13,16 @@ output:
       in_header: "favicon.html"
 ---
 
+## Weekly Objectives
+
+  * Randomness and probability
+  * Philosophy of Statistical hypothesis test
+  * Experiment  
+  * Null and alternative hypotheses   
+  * Type I and Type II errors
+  * Statistical power
+  * Limitations of statistics
+  
+## Lecture Note
+
+## R Examples
