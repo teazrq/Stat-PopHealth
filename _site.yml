@@ -1,9 +1,8 @@
 name: "Statistics in Population Health"
 navbar:
-  title: "Statistics"
   left:
     - text: "Home"
-      icon: fa-bars
+      icon: fa-home
       href: index.html
     - text: "Lecture Notes"
       icon: fa-book
