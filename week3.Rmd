@@ -20,6 +20,7 @@ We will review
   * Philosophy of Statistical hypothesis test
   * Type I and Type II errors
   * Statistical power
+  * Interpreting p-values
   
 New objectives
 

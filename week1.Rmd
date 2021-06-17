@@ -18,7 +18,8 @@ output:
   * Randomness and probability
   * Philosophy of Statistical hypothesis test
   * Experiment  
-  * Null and alternative hypotheses   
+  * Null and alternative hypotheses
+  * Interpreting p-values
   * Type I and Type II errors
   * Statistical power
   * Limitations of statistics
