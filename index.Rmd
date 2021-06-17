@@ -1,5 +1,5 @@
 ---
-title: "Welcome, Class of 2025!"
+title: "Statistical Methods in Population Health"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
@@ -13,6 +13,8 @@ output:
     includes:
       in_header: "favicon.html"
 ---
+
+## Welcome, Class of 2025!
 
 This website provides lectures and R examples for the Statistical components in the __*Foundations: Molecules to Populations*__ course at the Carle Illinois College of Medicine. The lectures are given at each Wednesday morning. 
 
