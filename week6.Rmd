@@ -19,6 +19,7 @@ output:
   * Survival function and hazard function
   * Log-rank test for two groups of samples
   * Cox proportional hazard model
+  * Interpreting parameters in a Cox-PH model
   * Machine learning vs. Statistics
   * Some popular machine learning models
   
