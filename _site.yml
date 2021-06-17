@@ -26,14 +26,14 @@ navbar:
           - text: "Week 6: Survival Analysis and Beyond"
             icon: fa-bookmark
             href: week6.html
-    - text: "Additional Resources" 
+    - text: "Additional Resources"
       icon: fa-info-circle
       href: info.html
   right:
     - icon: fa-university fa-lg
       href: https://medicine.illinois.edu
     - icon: fa-github fa-lg
-      href: https://github.com/teazrq
+      href: https://github.com/teazrq/Stat-PopHealth
     - icon: fa-google fa-lg
       href: https://sites.google.com/site/teazrq
 output:
