@@ -26,4 +26,15 @@ output:
   
 ## Lecture Note
 
+  + [[Intro to Statistics](notes/week1/Intro to Stat.pdf){target='_blank'}]
+  
 ## R Examples
+
+  + None
+  
+## Homework
+
+  + Reading: Sections 11.3.3 and 11.3.4 of [textbook](info.html)
+  + Install R and RStudio
+      + If you have trouble installing R or RStudio, [this video](https://www.youtube.com/watch?v=cX532N_XLIs) can be helpful
+      + You can find some basic R information in [[Chaper 1](https://teazrq.github.io/SMLR/r-rstudio-and-r-markdown.html)] of my textbook. We will go through some of them in Week 2. 
