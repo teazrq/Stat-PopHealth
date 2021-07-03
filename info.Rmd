@@ -15,10 +15,10 @@ output:
 
 ## Textbook
 
-  + Bruce, N., Pope, D., & Stanistreet, D. (2018). _Quantitative methods for health research: a practical interactive guide to epidemiology and statistics_. John Wiley & Sons.
+  + [**BPS**] Bruce, N., Pope, D., & Stanistreet, D. (2018). _Quantitative methods for health research: a practical interactive guide to epidemiology and statistics_. John Wiley & Sons.
   + You can download the online version of this textbook [[here](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Quantitative+methods+for+health+research%3A+a+practical+interactive+guide+to+epidemiology+and+statistics&btnG=)]
   
 ## R Help
 
-  + I am also preparing a textbook for [[Statistical Learning and Machine Learning with R](https://teazrq.github.io/SMLR/)]
+  + [**SMLR**] I am also preparing a textbook for [[Statistical Learning and Machine Learning with R](https://teazrq.github.io/SMLR/)]
   + We will use some of these material for R introduction
