@@ -42,10 +42,6 @@ For example, I have the following setup in my folder. To reproduce this, you sho
   Demographic <- read.xport("DEMO_I.XPT")         
     # https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DEMO_I.XPT
   
-  # Dietary Data
-  DietaryFood1 <- read.xport("DR1IFF_I.XPT")      
-    # https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DR1IFF_I.XPT
-
   # Questionnaire Data
   Diabetes <- read.xport("DIQ_I.XPT")             
     # https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DIQ_I.XPT
@@ -65,13 +61,11 @@ For example, I have the following setup in my folder. To reproduce this, you sho
   Demographic_Sub = Demographic[, c("SEQN", "RIDAGEYR")]
   Diabetes_Sub = Diabetes[, c("SEQN", "DIQ010")]
   BodyMeasure_Sub = BodyMeasure[, c("SEQN", "BMXBMI")]
-  Food1_Sub = DietaryFood1[, c("SEQN", "DR1ISUGR", "DR1IKCAL")]
-  Food1_Sub = aggregate(. ~ SEQN, Food1_Sub, FUN=sum)
   
   # Merge all dataset by SEQN (the unique identifier)
   # This is a rather complicated function
   RawData = Reduce(function(x,y) merge(x = x, y = y, by = "SEQN", all.x = TRUE),
-                   list(Demographic_Sub, Diabetes_Sub, Food1_Sub, BodyMeasure_Sub))
+                   list(Demographic_Sub, Diabetes_Sub, BodyMeasure_Sub))
   
   RawData = RawData[complete.cases(RawData), ]
 ```
@@ -101,6 +95,6 @@ Now you can perform analysis using this data. For example,
 
   # Plot calorie intake and BMI, colored by diabetes status
   library(ggplot2)
-  ggplot(RawData, aes(DR1IKCAL, BMXBMI, colour = as.factor(DIQ010))) + 
-    geom_point()  
+  ggplot(RawData, aes(RIDAGEYR, BMXBMI, colour = as.factor(DIQ010))) + 
+    geom_point()
 ```
