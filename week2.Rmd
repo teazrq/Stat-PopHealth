@@ -35,8 +35,9 @@ output:
   
 ## NHANCE data introduction
 
-You need to use some public available dataset to support the final project analysis. [NHANCE data](https://wwwn.cdc.gov/nchs/nhanes/) is a rich nation-wide questionnaire data provided by the CDC. If you choose to use the NHANCE data, some data processing need to be done. Here is a [[toy example](rcode/week2/ReadNHANCEData.html)] for downloading and processing the [2015-2016 data](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2015). For your own analysis, you may want to consider the more recent [2017-2018 data](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017). Additional source and data files:
+You need to use some public available dataset to support the final project analysis. [NHANCE data](https://wwwn.cdc.gov/nchs/nhanes/){target='_blank'} is a rich nation-wide questionnaire data provided by the CDC. If you choose to use the NHANCE data, some data processing need to be done. Here is a [[toy example](rcode/week2/ReadNHANCEData.html)] for downloading and processing the [2015-2016 data](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2015). For your own analysis, you may want to consider the more recent [2017-2018 data](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017){target='_blank'}. Additional source and data files:
 
+  * [Toy example](rcode/week2/ReadNHANCEData.html){target='_blank'}
   * `.Rmd` [`r xfun::embed_file('docs/rcode/week2/ReadNHANCEData.Rmd', text = 'Source File')`]
   * Data Files (from NHANES 2015-2016)
       + Demographic data: [DEMO_I.XPT](https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DEMO_I.XPT)
