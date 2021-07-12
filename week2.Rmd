@@ -24,4 +24,28 @@ output:
   
 ## Lecture Note
 
+  + [[Introduction to R, RStudio and R Markdown](notes/week2/R-Intro.html){target='_blank'}]
+  + The original `.Rmd` [`r xfun::embed_file('docs/notes/week2/R-Intro.Rmd', text = 'Source File')`] used to generate the lecture note
+  + The [birthrate data](data/birthrate.csv){target='_blank'} in `.csv` format
+  
 ## R Examples
+
+  + R Markdown [[Tutorial](https://teazrq.github.io/SMLR/rmarkdown-basics.html)], its [[Source File](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/teazrq/SMLR/blob/master/1.2-rmd-basics.Rmd)]
+  + The [skin cancer data](data/skincancer.txt){target='_blank'}
+  
+## NHANCE data introduction
+
+You need to use some public available dataset to support the final project analysis. [NHANCE data](https://wwwn.cdc.gov/nchs/nhanes/) is a rich nation-wide questionnaire data provided by the CDC. If you choose to use the NHANCE data, some data processing need to be done. Here is a [[toy example](rcode/week2/ReadNHANCEData.html)] for downloading and processing the [2015-2016 data](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2015). For your own analysis, you may want to consider the more recent [2017-2018 data](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017). Additional source files:
+
+  * `.Rmd` [`r xfun::embed_file('docs/rcode/week2/ReadNHANCEData.Rmd', text = 'Source File')`]
+  * Data Files (from NHANES 2015-2016)
+      + Demographic data: [DEMO_I.XPT](https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DEMO_I.XPT)
+      + Dietary data: [DR1IFF_I.XPT](https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DR1IFF_I.XPT)
+      + Diabetes data: [DIQ_I.XPT](https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DIQ_I.XPT)
+      + Examination data: [BMX_I.XPT](https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/BMX_I.XPT)
+
+## Homework
+
+  + Discuss with your team members about the final project idea and data sources
+  + Practice the summary statistics and data visualization functions in R
+  + Reading: Sections 5.5.4 from the [BPS textbook](info.html) to prepare for next week's lecture
