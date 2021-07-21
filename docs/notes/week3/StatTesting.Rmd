@@ -18,7 +18,7 @@ output:
 
 ```{r set-options, echo=FALSE, cache=FALSE}
   options(width = 1000)
-  knitr::opts_chunk$set(fig.width=9, fig.height=7, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(fig.width=9, fig.height=6, out.width = "75%", fig.align = 'center')
   knitr::opts_chunk$set(class.source = "fold-show")
   knitr::opts_chunk$set(collapse=TRUE)
 ```
@@ -35,7 +35,7 @@ We construct the testing procedure:
   * Look at the actual observed mean value (87) and compare it to the cut-off value
   * Accept or reject the Null hypothesis
 
-```{r out.width = "60%"}
+```{r}
   # Generate 1000 such "classes" and obtain the distribution
   library(ggplot2)
   set.seed(1)
@@ -43,13 +43,17 @@ We construct the testing procedure:
   allaverage = rep(NA, 1000)
   for (i in 1:1000)
     allaverage[i] = mean(rnorm(48, mean = 85, sd = 10))
-  
+```
+
+```{r class.source = NULL, out.width = "60%"}
   ggplot(data.frame(allaverage), aes(x=allaverage)) + 
     geom_histogram(aes(y=..density..), colour="black", fill="white") +
     geom_density(alpha=.2, fill="#FF6666") +
     labs(x = "Simulated Average Scores") + 
     geom_vline(xintercept = 87, color = "blue", size = 1.2)
-  
+```
+
+```{r}
   # Now, a surprising result should fall into the top 5% of that distribution
   quantile(allaverage, 0.95)
 ```
@@ -58,7 +62,7 @@ The distribution (of averages) we are trying to obtain from this simulation is c
 
 In short, the distribution of the average of 48 students, **if** each of them follows independently from normal distribution of mean 85 and standard deviation (SD) 10, would be normal distribution with mean 85 and standard deviation $10/\sqrt{48}$. Hence we can compare the theoretical distribution with the simulated data obtained previously. They are in fact very similar. 
 
-```{r out.width = "60%"}
+```{r class.source = NULL, out.width = "60%"}
   # the simulated data
   p <- ggplot(data.frame(allaverage), aes(x=allaverage)) + 
         geom_histogram(aes(y=..density..), colour="black", fill="white") +
@@ -78,18 +82,6 @@ We can also obtain the theoretical cut-off point based on this distribution, giv
 ```{r}
   # calculate p-value of the z-test
   pnorm(87 - 85, sd = 10/sqrt(48), lower.tail = FALSE)
-```
-
-### Practice questions
-
-  1. Suppose we are interested in testing whether the average score is larger than 80. However, assume that the true ability of each student follows a normal distribution with SD = 15. And we actually observe the average test score as 90. Can you obtain the $p$-value of this test?
-```{r class.source = NULL, eval = FALSE}
-  pnorm(90 - 80, sd = 15/sqrt(48), lower.tail = FALSE)
-```
-
-  2. Following the same assumptions as the previous question, suppose we are interested in testing whether the average score is **smaller than 95**. Can you obtain the $p$-value of this test?
-```{r class.source = NULL, eval = FALSE}
-  pnorm(90 - 95, sd = 15/sqrt(48), lower.tail = TRUE)
 ```
 
 ## Interpretation of $p$-values
@@ -113,11 +105,29 @@ Hence, we can expect four possible outcomes:
 | **Null True**        |  [`Confidence Level`](https://en.wikipedia.org/wiki/Confidence_interval)  |  [`Type I Error`](https://en.wikipedia.org/wiki/Type_I_and_type_II_errors) |
 | **Alternative True** |    [`Type II Error`](https://en.wikipedia.org/wiki/Type_I_and_type_II_errors)   |   [`Power`](https://en.wikipedia.org/wiki/Power_of_a_test) |
 
-Based on this definition, answer the following questions:
+Based on our preliminary analysis, we will decide to reject the Null hypothesis if the observed mean is larger than 87.34. However, keep in mind that at this point we have not observe the actual data yet, and we do not know if the data comes from a Null or Alternative. Previously we only discussed if the Null is the data generator, but what if the Alternative is? 
 
-  * If we get $p$-value $=0$ (in certain situations we could), can we know for sure that the Null hypothesis is wrong?
-  * Based on the testing procedure, what is the chance that we make a mistake when the alternative hypothesis is true?
-  * Discussion: What factors could affect the type II error?
+  * In this case we do want to reject the Null
+  * How much chance we reject the Null if the true population mean is 86? (Power)
+  * Sample size calculation is also related to this issue: if true population mean is 86 and we want 90% power, how much samples do we need? (see the sample size and CLT discuss later)
+
+### Practice questions
+
+  1. Suppose we are interested in testing whether the average score is larger than 80. However, assume that the true ability of each student follows a normal distribution with SD = 15. And we actually observe the average test score as 90. Can you obtain the $p$-value of this test?
+```{r class.source = NULL, eval = FALSE}
+  pnorm(90 - 80, sd = 15/sqrt(48), lower.tail = FALSE)
+```
+
+  2. Following the same assumptions as the previous question, suppose we are interested in testing whether the average score is **smaller than 95**. Can you obtain the $p$-value of this test?
+```{r class.source = NULL, eval = FALSE}
+  pnorm(90 - 95, sd = 15/sqrt(48), lower.tail = TRUE)
+```
+
+  3. Discuss the following questions:
+  
+      * If we get $p$-value $=0$ (in certain situations we could), can we know for sure that the Null hypothesis is wrong?
+      * Based on the testing procedure, what is the chance that we make a mistake when the alternative hypothesis is true?
+      * Discussion: What factors could affect the type II error?
   
 ## Testing samples with unknown variance: $t$-test
 
