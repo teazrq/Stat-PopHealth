@@ -26,6 +26,14 @@ output:
   * Perform linear regression in R
   * Model evaluation criteria
   
-## Lecture Note
+## Reading Material
 
-## R Examples
+You should **complete this reading material before** the TBL session on Wed, July 28. 
+
+  * Linear Regression
+
+## Discussion Session
+
+  * 
+
+
