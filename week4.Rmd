@@ -40,6 +40,7 @@ There are also several questions about more advanced topics in linear regression
 
   * What types of relationship cannot be properly modeled by a linear regression and how to address them in practice?
   * What is the risk and solutions of using too many variables in a linear regression
+  * What is the effect of confounding variables
 
 ## Reading Material
 
