@@ -35,8 +35,8 @@ Correlation is one of the most commonly used concept in statistics when analyzin
 
 The sample Pearson correlation between two variables, $x$ and $y$, is defined as 
 
-$$ r_{xy} = \frac{\sum_i (x_i - \bar x)(y_i - \bar y)}{\hat\sigma_x \hat\sigma_y }$$
-where the $\hat\sigma_x$ and $\hat\sigma_y$ are the sample standard deviations. Here are some explications of this formula:
+$$ r_{xy} = \frac{\sum_i (x_i - \bar x)(y_i - \bar y)}{(n-1)\hat\sigma_x \hat\sigma_y }$$
+where the $\hat\sigma_x$ and $\hat\sigma_y$ are the unbiased sample standard deviations. Here are some explications of this formula:
 
   * The numerator quantifies how much the two variables varies together (from their respective centers $\bar x$ and $\bar y$)
   * The denominator is the product of two standard deviations, which scale the whole quantity to be within [-1, 1]

@@ -2869,7 +2869,7 @@ div.tocify {
   </script>
 </div>
 <p>The sample Pearson correlation between two variables, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, is defined as</p>
-<p><span class="math display">\[ r_{xy} = \frac{\sum_i (x_i - \bar x)(y_i - \bar y)}{\hat\sigma_x \hat\sigma_y }\]</span> where the <span class="math inline">\(\hat\sigma_x\)</span> and <span class="math inline">\(\hat\sigma_y\)</span> are the sample standard deviations. Here are some explications of this formula:</p>
+<p><span class="math display">\[ r_{xy} = \frac{\sum_i (x_i - \bar x)(y_i - \bar y)}{(n-1)\hat\sigma_x \hat\sigma_y }\]</span> where the <span class="math inline">\(\hat\sigma_x\)</span> and <span class="math inline">\(\hat\sigma_y\)</span> are the unbiased sample standard deviations. Here are some explications of this formula:</p>
 <ul>
 <li>The numerator quantifies how much the two variables varies together (from their respective centers <span class="math inline">\(\bar x\)</span> and <span class="math inline">\(\bar y\)</span>)</li>
 <li>The denominator is the product of two standard deviations, which scale the whole quantity to be within [-1, 1]</li>
