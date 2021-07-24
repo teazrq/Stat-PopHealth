@@ -1,0 +1,135 @@
+---
+title: "TBL Reading (Week 4): Correlation and Independence"
+author: "Ruoqing Zhu"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+  options(width = 1000)
+  knitr::opts_chunk$set(fig.width=9, fig.height=6, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(class.source = "fold-show")
+  knitr::opts_chunk$set(collapse=TRUE)
+```
+
+## Basic concept
+
+Correlation is one of the most commonly used concept in statistics when analyzing the relationship between variables. The most popular mathematical definition, [Pearson correlation](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient) is named after [Karl Pearson](https://en.wikipedia.org/wiki/Karl_Pearson). However, the concept was proposed by [Francis Galton](https://en.wikipedia.org/wiki/Francis_Galton) in 1888. Galton studied the association between the average height of parents and the height of their adult child. The data can be loaded from the `HistData` package. 
+
+```{r}
+  library(HistData)
+  data(GaltonFamilies)
+  GaltonFamilies
+```
+
+The sample Pearson correlation between two variables, $x$ and $y$, is defined as 
+
+$$ r_{xy} = \frac{\sum_i (x_i - \bar x)(y_i - \bar y)}{\hat\sigma_x \hat\sigma_y }$$
+where the $\hat\sigma_x$ and $\hat\sigma_y$ are the sample standard deviations. Here are some explications of this formula:
+
+  * The numerator quantifies how much the two variables varies together (from their respective centers $\bar x$ and $\bar y$)
+  * The denominator is the product of two standard deviations, which scale the whole quantity to be within [-1, 1]
+  * When this correlation is -1 or 1, there is a perfect correlation meaning that $x_i - \bar x$ equals $c \times (y_i - \bar y)$ for all subject $i$, with some constant $c$. This means that, once we center both variables, one variable is just a scale change from the other. And the sign of that scaling factor determines if its negative or positive correlation. 
+
+## Calcucating and interpreting the sample correlation
+
+To calculate the Pearson correlation, we can use the `cor()` function
+
+```{r}
+  cor(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight)
+  plot(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight, 
+       xlab = "Average Parent Height", ylab = "Child Height",
+       pch = 19, cex = 0.5, main = "Galton Data", col = "deepskyblue")
+  legend("bottomright", "Correlation = 0.321", cex = 1.5)
+```
+
+As we can see, there is a positive trend how two variables move together. However, this correlation is not very strong. In practice, it is difficult to decide whether a correlation is strong or not. [Cohen (1988)](https://scholar.google.com/scholar_lookup?title=Statistical%20power%20analysis%20for%20the%20behavioral%20sciences&author=J.%20Cohen&publication_year=1988) suggests that 0.1 is weak, 0.3 is moderate, while 0.5 is strong. However, this is a very field-specific concept. For example, [Gignac and Szodorai (2016)](https://www.sciencedirect.com/science/article/pii/S0191886916308194?casa_token=Vw-n84luM58AAAAA:PH6uejJ7c6ozR0XYjuxezLzIjgtpZ6FDlNsEDCbDt-whn0dP7jgTnJrUqDHyfq6psRfIR9wgMQ) reported that less than $3\%$ of correlations reported in the psychology literature were found to be as large as 0.5. In biomedical studies, it is also rare to see very strong correlation between a single biomarker and a certain disease. Hence, you need to make the judgment accordingly. The following plots of different correlation magnitude may give you an idea:
+
+```{r out.width = "90%", class.source = NULL}
+  library(MASS)
+  set.seed(2)
+  par(mfrow=c(2, 3)) # this sets multiple plots
+  par(mar=c(1, 1, 2, 1)) # this sets margins for each of them
+  corxy = c(-0.5, 0, 0.25, 0.5, 0.7, 0.9)
+  for (i in 1:6)
+  {
+    # this code generates variables from a multivariate normal distribution with correlated variables
+    xy = mvrnorm(500, mu = c(0, 0),
+                 Sigma = matrix(c(1, corxy[i], corxy[i], 1), 2, 2))
+    plot(xy[, 1], xy[, 2], xaxt='n', yaxt='n',
+         pch = 19, cex = 0.5, col = "darkorange",
+         main = paste("Correlation approx.", corxy[i]))
+  }
+```
+
+## Testing the significance 
+
+A statistical test can be used to determine if the **population correlation coefficient** is different from zero or not. Note that what we introduced before is the **sample correlation coefficient**, which can be calculated from a collected sample. However, this sample is only a representation of the entire population, which has a true correlation $\rho_{xy}$. Hence, we may be able to make inference about $\rho_{xy}$ from the collected samples. Formally, the hypothesis is 
+
+$$H_0: \rho_{xy} = 0 \quad \text{vs.}  \quad H_1: \rho_{xy} \neq 0.$$
+In fact, the test statistic is very simple, 
+
+$$ t = \frac{r_{xy} \sqrt{n-2}}{\sqrt{1 - r_{xy}^2}},$$
+
+which follows a $t$ distribution with $n-2$ degrees of freedom. This can be done completely with `R`. 
+
+```{r}
+  cor.test(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight)
+```
+
+The result turns out to be highly significant. However, keep in mind that this is only testing if the true correlation is zero or not. It does not reflect whether the correlation is strong or not. Large sample size will usually lead to higher significance. 
+
+## Relationship with independence
+
+**Uncorrelated should be not confused with independence**. This following example generates uncorrelated (theoretically) variables 
+
+```{r out.width = "90%", fig.height=4}
+  set.seed(1)
+  x = rnorm(10000)
+  y = x + rnorm(10000, sd = 0.5)
+  z = y^2
+  par(mfrow=c(1, 2))
+  par(mar=c(4, 4, 1, 1))
+  plot(x, y, pch = 19, cex = 0.2)
+  plot(x, z, pch = 19, cex = 0.2)
+  cor(x, y)
+  cor(x, z)
+```
+
+Its easy to see that although $x$ and $y$ have very high correlation (0.899), the sample correlation between $x$ and $z$ is almost zero (-0.022). However, we cannot say that $x$ and $z$ are independent. There is a precise [definition of independence](https://en.wikipedia.org/wiki/Independence_(probability_theory)) in statistics by stating the joint distribution as the product of two marginal distributions. But, that concept could be a bit difficult to explain to a beginner. However, you can think about this conceptual understanding of independence: 
+
+  * If we restrict ourselves to a small range of $x$, and look at what is the distribution of $y$ given that $x$ is within that range, then that distribution (including mean, spread, etc) of $y$ is the same regardless of the specific range you considered for $x$. 
+
+This is clearly not the case between $x$ and $y$ (or $x$ and $z$) in our previous plot, since as $x$ changes, the mean of $y$ (or $z$) is shifting. 
+
+On the opposite side, if two variables are independent, then the correlation has to be 0. But keep in mind that this is a statement regarding the entire population, not the small sample you collected. 
+
+## Other types of correlation measures
+
+The Pearson correlation has some assumptions associated with it. One of the most crucial one is that both variables should be normally distributed. You may still use the Pearson correlation if there is a mild violation. However, you should consider rank based correlation, such as [Spearman](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient) and [Kendall's $\tau$](https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient) in other cases. 
+
+
+## Practice questions 
+
+  1. Estimate and test the significance of the correlation between the father height and mother height in the `GaltonFamilies` dataset. Do you think the two variables are independent?
+  
+```{r class.source = NULL, eval = FALSE}
+  cor(GaltonFamilies$father, GaltonFamilies$mother)
+  cor.test(GaltonFamilies$father, GaltonFamilies$mother)
+```
+
+  2. Read Table 1 of [this paper](papers/Tosepu2020). Which variable is considered significantly correlated with the COVID19 cases count? What type of correlation is used in this paper? And why?
+
+
+

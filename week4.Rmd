@@ -26,14 +26,27 @@ output:
   * Perform linear regression in R
   * Model evaluation criteria
   
+## TBL Overview
+
+You should **complete this reading material before** the TBL session on Wed, July 28. This week's TBL session focuses on correlation and linear regression. To successfully complete the questions in this TBL session, you should focus on the following topics while reading the materials:
+
+  * Use R to compute and interpret the correlation between two variables
+  * Understand the relationship and differences between correlation and independence 
+  * Use R to perform simple and multiple linear regressions
+  * Read the output from R to evaluate the variables and the overall model fitting
+  * How to use linear regression for prediction
+
+There are also several questions about more advanced topics in linear regression:
+
+  * What types of relationship cannot be properly modeled by a linear regression and how to address them in practice?
+  * What is the risk and solutions of using too many variables in a linear regression
+
 ## Reading Material
 
-You should **complete this reading material before** the TBL session on Wed, July 28. 
-
-  * Linear Regression
+  * [Correlation and Independence](notes/week4/TBL-Correlation.html) 
+  * Simple Linear Regression
+  * Multiple Linear Regression and Confounding Variables
 
 ## Discussion Session
-
-  * 
 
 
