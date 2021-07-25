@@ -18,19 +18,47 @@ output:
 
 ```{r set-options, echo=FALSE, cache=FALSE}
   options(width = 1000)
-  knitr::opts_chunk$set(fig.width=9, fig.height=6, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(fig.width=9, fig.height=6, out.width = "65%", fig.align = 'center')
   knitr::opts_chunk$set(class.source = "fold-show")
   knitr::opts_chunk$set(collapse=TRUE)
 ```
 
 ## Basic concept
 
+While the correlation between two variables can describe their association, it does not provide a tool to predict one variable given another. Linear regression can be used for that purpose. Here is the example of Galton's study of heritability. 
 
 ```{r}
   library(HistData)
   data(GaltonFamilies)
-  GaltonFamilies
+  par(mar = c(4,4,0.5,0.5))
+  plot(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight, 
+       pch = 19, col = "deepskyblue", cex = 0.6, 
+       xlab = "Average Parent Height", ylab = "Children Height")
 ```
+
+If we need to place a line on this plot to approximate the relationship, what angle and intercept should that line has? How do we define the **optimal line** using the samples collected? 
+
+```{r}
+  par(mar = c(4,4,0.5,0.5))
+  plot(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight, 
+       pch = 19, col = "deepskyblue", cex = 0.6, 
+       xlab = "Average Parent Height", ylab = "Children Height")
+  
+  # some random lines?
+  abline(25, 0.6, col = "darkorange", lwd = 2)
+  abline(-45, 1.6, col = "darkorange", lwd = 2)
+```
+
+[Legendre (1752-1833)](https://en.wikipedia.org/wiki/Adrien-Marie_Legendre) proposed a method called the **least square** approach for solving linear regression systems. For simple linear regression, we are interested in modeling the relationship
+
+$$Y = \beta_0 + \beta_1 X + \epsilon.$$
+Here $X$ is called a covariate (or independent variable) and $Y$ is called a response variable (or dependent variable). $\epsilon$ is used here to absorb any unexplained effect, they are also called the random noise, or random error.  
+
+The parameters can be estimated through 
+
+$$\widehat \beta_1 = \frac{\sum_{i=1}^n (y_i - \bar y)(x_i - \bar x)}{\sum_{i=1}^n (x_i - \bar x)^2}$$
+$$\widehat \beta_0 = \bar y - \widehat \beta_1 \bar x $$
+
 
 ## Practice questions 
 
