@@ -129,7 +129,7 @@ The Pearson correlation has some assumptions associated with it. One of the most
   cor.test(GaltonFamilies$father, GaltonFamilies$mother)
 ```
 
-  2. Read Table 1 of [this paper](papers/Tosepu2020). Which variable is considered significantly correlated with the COVID19 cases count? What type of correlation is used in this paper? And why?
+  2. Read Table 1 of [this paper](papers/Tosepu2020.pdf). Which variable is considered significantly correlated with the COVID19 cases count? What type of correlation is used in this paper? And why?
 
 
 

@@ -48,4 +48,3 @@ Washington               47.5     117    1    121.0
 WestVirginia             38.8     136    0     80.8
 Wisconsin                44.5     110    0     90.2
 Wyoming                  43.0     134    0    107.5
-{"mode":"full","isActive":false}
