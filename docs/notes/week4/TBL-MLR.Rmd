@@ -97,7 +97,7 @@ The prediction can be done using the same dataset we specified before:
   predict(fit, testdata)
 ```
 
-Do you notice the change of significance? What do you think is the cause? Which variable(s) would you like to remove?
+Do you notice the change of significance? What do you think is the cause? Which variable(s) would you like to remove/keep?
 
 ## Collinearity
 

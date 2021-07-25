@@ -46,7 +46,7 @@ There are also several questions about more advanced topics in linear regression
 
   * [[Correlation and Independence](notes/week4/TBL-Correlation.html)]; Original `.Rmd` [`r xfun::embed_file('docs/notes/week4/TBL-Correlation.Rmd', text = 'Source File')`]
   * [[Simple Linear Regression](notes/week4/TBL-SLR.html)]; Original `.Rmd` [`r xfun::embed_file('docs/notes/week4/TBL-SLR.Rmd', text = 'Source File')`]
-  * Multiple Linear Regression and Confounding Variables
+  * [[Multiple Linear Regression and Confounding Variables](notes/week4/TBL-MLR.html)]; Original `.Rmd` [`r xfun::embed_file('docs/notes/week4/TBL-MLR.Rmd', text = 'Source File')`]
 
 ## Discussion Session
 
