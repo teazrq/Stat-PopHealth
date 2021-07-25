@@ -3067,97 +3067,29 @@ div.tocify {
 <div id="practice-questions" class="section level2">
 <h2>Practice Questions</h2>
 <ol style="list-style-type: decimal">
-<li>Fit a multiple linear regression models the Child’s height using the <code>GaltonFamilies</code> dataset. You should consider the following terms in your regression: * Father’s height * Mother’s height * An interaction between father and mother’s heights * Number of children in the family, as a nominal categorical variable</li>
+<li><p>Fit a multiple linear regression models the Child’s height using the <code>GaltonFamilies</code> dataset. You should consider the following terms in your regression:</p>
+<ul>
+<li>Father’s height</li>
+<li>Mother’s height</li>
+<li>An interaction between father and mother’s heights</li>
+<li>Number of children in the family, as a nominal categorical variable</li>
+</ul></li>
 </ol>
-<pre class="r fold-show"><code>  library(HistData)
+<pre class="r"><code>  library(HistData)
   data(GaltonFamilies)
-  summary(lm(childHeight ~ father + mother + I(father*mother) + as.factor(children), data = GaltonFamilies))
-## 
-## Call:
-## lm(formula = childHeight ~ father + mother + I(father * mother) + 
-##     as.factor(children), data = GaltonFamilies)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -9.0683 -2.6612 -0.2106  2.7007 11.9768 
-## 
-## Coefficients:
-##                        Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)           158.08265   92.26363   1.713    0.087 .
-## father                 -1.58092    1.32316  -1.195    0.232  
-## mother                 -1.78651    1.43088  -1.249    0.212  
-## I(father * mother)      0.02989    0.02051   1.457    0.145  
-## as.factor(children)2   -0.11431    0.77265  -0.148    0.882  
-## as.factor(children)3    0.41436    0.72290   0.573    0.567  
-## as.factor(children)4    0.41936    0.66382   0.632    0.528  
-## as.factor(children)5    0.50247    0.65637   0.766    0.444  
-## as.factor(children)6   -0.08158    0.67866  -0.120    0.904  
-## as.factor(children)7   -0.28092    0.66729  -0.421    0.674  
-## as.factor(children)8   -0.11057    0.66040  -0.167    0.867  
-## as.factor(children)9   -0.45479    0.73230  -0.621    0.535  
-## as.factor(children)10  -0.88972    0.79794  -1.115    0.265  
-## as.factor(children)11  -0.57072    0.78526  -0.727    0.468  
-## as.factor(children)15  -1.15764    1.15360  -1.004    0.316  
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 3.384 on 919 degrees of freedom
-## Multiple R-squared:  0.1195, Adjusted R-squared:  0.106 
-## F-statistic: 8.905 on 14 and 919 DF,  p-value: &lt; 2.2e-16</code></pre>
+  summary(lm(childHeight ~ father + mother + I(father*mother) + as.factor(children), data = GaltonFamilies))</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Do you notice any problem with this model? What could be the causes? Now, instead of defining the number of children as a nominal categorical variable, treat it as an ordinal one (continuous). What is the most significant variable in this new model?</li>
 </ol>
-<pre class="r fold-show"><code>  summary(lm(childHeight ~ father + mother + I(father*mother) + children, data = GaltonFamilies))
-## 
-## Call:
-## lm(formula = childHeight ~ father + mother + I(father * mother) + 
-##     children, data = GaltonFamilies)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -9.2023 -2.6718 -0.1344  2.8124 11.8052 
-## 
-## Coefficients:
-##                     Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept)        140.89514   82.42763   1.709  0.08773 . 
-## father              -1.32329    1.18720  -1.115  0.26530   
-## mother              -1.51732    1.28027  -1.185  0.23626   
-## I(father * mother)   0.02601    0.01844   1.411  0.15871   
-## children            -0.11422    0.04110  -2.779  0.00556 **
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 3.376 on 929 degrees of freedom
-## Multiple R-squared:  0.114,  Adjusted R-squared:  0.1102 
-## F-statistic: 29.88 on 4 and 929 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>  summary(lm(childHeight ~ father + mother + I(father*mother) + children, data = GaltonFamilies))</code></pre>
 <ol start="3" style="list-style-type: decimal">
-<li>The result still contradict with our understanding that both father and mother’s heights would affect a child’s height. Remove the interation term and refit the model.</li>
+<li>The result still contradict with our understanding that both father and mother’s heights would affect a child’s height. Remove the interaction term and refit the model. What do you think is the cause of this change? Based on this model, predict a child’s height if the father is 75, mother is 65 and there are 3 children in this family.</li>
 </ol>
-<pre class="r fold-show"><code>  summary(lm(childHeight ~ father + mother + children, data = GaltonFamilies))
-## 
-## Call:
-## lm(formula = childHeight ~ father + mother + children, data = GaltonFamilies)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -9.0608 -2.6310 -0.2443  2.7698 11.8025 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 24.78550    4.32241   5.734 1.32e-08 ***
-## father       0.35011    0.04525   7.737 2.64e-14 ***
-## mother       0.28729    0.04838   5.938 4.06e-09 ***
-## children    -0.11002    0.04101  -2.683  0.00743 ** 
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 3.378 on 930 degrees of freedom
-## Multiple R-squared:  0.1121, Adjusted R-squared:  0.1092 
-## F-statistic: 39.14 on 3 and 930 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>In fact, since <code>Ocean</code> is binary, it can be treated as either ordinal or nominal and the model would not change.</p>
-<ul>
-<li>Can you think of examples in which not including a confuding variable would cause a misleading result?</li>
-</ul>
+<pre class="r"><code>  summary(lm(childHeight ~ father + mother + children, data = GaltonFamilies))</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li><p>Can you think of examples in which not including a confounding variable would cause a misleading result?</p></li>
+<li><p>Read Table 2 in <a href="papers/Gooding2011.pdf">Goodings et al. (2011)</a> and contrasting Model 2 and Model 3. What could be the cause that the category <code>Multiethnic</code> parameter estimate changed quite significantly?</p></li>
+</ol>
 </div>
 
 

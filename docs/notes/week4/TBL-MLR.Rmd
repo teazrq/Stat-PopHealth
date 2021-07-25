@@ -155,12 +155,13 @@ In this case, $X$ is a confounding variable. Not including appropriate confoundi
 ## Practice Questions 
 
   1. Fit a multiple linear regression models the Child's height using the `GaltonFamilies` dataset. You should consider the following terms in your regression:
-    * Father's height
-    * Mother's height
-    * An interaction between father and mother's heights
-    * Number of children in the family, as a nominal categorical variable 
+  
+      * Father's height
+      * Mother's height
+      * An interaction between father and mother's heights
+      * Number of children in the family, as a nominal categorical variable 
     
-```{r}
+```{r class.source = NULL, eval = FALSE}
   library(HistData)
   data(GaltonFamilies)
   summary(lm(childHeight ~ father + mother + I(father*mother) + as.factor(children), data = GaltonFamilies))
@@ -168,20 +169,17 @@ In this case, $X$ is a confounding variable. Not including appropriate confoundi
 
   2. Do you notice any problem with this model? What could be the causes? Now, instead of defining the number of children as a nominal categorical variable, treat it as an ordinal one (continuous). What is the most significant variable in this new model?
   
-```{r}  
+```{r class.source = NULL, eval = FALSE}  
   summary(lm(childHeight ~ father + mother + I(father*mother) + children, data = GaltonFamilies))
 ```
 
-  3. The result still contradict with our understanding that both father and mother's heights would affect a child's height. Remove the interation term and refit the model. 
+  3. The result still contradict with our understanding that both father and mother's heights would affect a child's height. Remove the interaction term and refit the model. What do you think is the cause of this change? Based on this model, predict a child's height if the father is 75, mother is 65 and there are 3 children in this family. 
   
-```{r}  
+```{r class.source = NULL, eval = FALSE} 
   summary(lm(childHeight ~ father + mother + children, data = GaltonFamilies))
 ```
 
-  
-In fact, since `Ocean` is binary, it can be treated as either ordinal or nominal and the model would not change.
+  4. Can you think of examples in which not including a confounding variable would cause a misleading result? 
 
-  * Can you think of examples in which not including a confuding variable would cause a misleading result? 
-
-
+  5. Read Table 2 in [Goodings et al. (2011)](papers/Gooding2011.pdf) and contrasting Model 2 and Model 3. What could be the cause that the category `Multiethnic` parameter estimate changed quite significantly?
 
