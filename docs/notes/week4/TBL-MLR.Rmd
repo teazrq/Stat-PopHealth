@@ -1,5 +1,5 @@
 ---
-title: "TBL Reading (Week 4): Correlation and Independence"
+title: "TBL Reading (Week 4): Multiple Linear Regression"
 author: "Ruoqing Zhu"
 date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:

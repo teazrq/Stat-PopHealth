@@ -20,10 +20,10 @@ output:
   * Positive and negative correlation
   * Perform correlation calculation in R
   * Philosophy of linear regression
+  * Perform linear regression in R
   * Interpretation of parameters
   * Testing for significance of parameter ($t$-test)
   * Testing for overall significance ($F$-test)
-  * Perform linear regression in R
   * Model evaluation criteria
   
 ## TBL Overview

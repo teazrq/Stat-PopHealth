@@ -146,3 +146,5 @@ which predict that the mortality rate is 150.0839 per 10 million people. We can 
 ```
   
   2. Based on your understanding of a simple linear regression, is this model a good fitting? 
+  
+  3. Read Table 2 in [Goodings et al. (2011)](papers/Gooding2011.pdf), what is the p-value associated with food insecure when modeling BMI in females using a simple linear regression? 
