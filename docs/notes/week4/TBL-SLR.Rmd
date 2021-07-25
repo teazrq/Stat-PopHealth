@@ -23,42 +23,126 @@ output:
   knitr::opts_chunk$set(collapse=TRUE)
 ```
 
-## Basic concept
+## Basic Concept
 
-While the correlation between two variables can describe their association, it does not provide a tool to predict one variable given another. Linear regression can be used for that purpose. Here is the example of Galton's study of heritability. 
+While the correlation between two variables can describe their association, it does not provide a tool to predict one variable given another. Linear regression can be used for that purpose. Here is an example of skin cancer data. This data was collected in 1950 when there were 48 states (without Alaska and Hawaii), and Washington, D.C. was included as a 49th state. We plot the latitude against the mortality rate (number of deaths per 10 million people) of these 49 observations.
 
 ```{r}
-  library(HistData)
-  data(GaltonFamilies)
-  par(mar = c(4,4,0.5,0.5))
-  plot(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight, 
-       pch = 19, col = "deepskyblue", cex = 0.6, 
-       xlab = "Average Parent Height", ylab = "Children Height")
+    skincancer = read.table("skin.txt", header = TRUE)
+    par(mar = c(4,4,0.5,0.5))
+    plot(Mort ~ Lat, data = skincancer, pch = 19, col = "deepskyblue",
+         xlab = "Latitude", ylab = "Mortality Rate")
 ```
-
-If we need to place a line on this plot to approximate the relationship, what angle and intercept should that line has? How do we define the **optimal line** using the samples collected? 
+We can see that their is an association between the two, and almost a linear relationship. If we need to place a line on this plot to describe this linear relationship, what angle and intercept should that line have? How do we define the **optimal line** using the samples collected? 
 
 ```{r}
   par(mar = c(4,4,0.5,0.5))
-  plot(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight, 
-       pch = 19, col = "deepskyblue", cex = 0.6, 
-       xlab = "Average Parent Height", ylab = "Children Height")
+  plot(Mort ~ Lat, data = skincancer, pch = 19, col = "deepskyblue",
+       xlab = "Latitude", ylab = "Mortality Rate")
   
   # some random lines?
-  abline(25, 0.6, col = "darkorange", lwd = 2)
-  abline(-45, 1.6, col = "darkorange", lwd = 2)
+  abline(350, -5, col = "darkorange", lwd = 2)
+  abline(420, -7, col = "darkorange", lwd = 2)
 ```
 
-[Legendre (1752-1833)](https://en.wikipedia.org/wiki/Adrien-Marie_Legendre) proposed a method called the **least square** approach for solving linear regression systems. For simple linear regression, we are interested in modeling the relationship
+## The Optimal Line
+
+[Legendre](https://en.wikipedia.org/wiki/Adrien-Marie_Legendre) proposed a method called the **least square** approach for solving linear regression systems. A **simple linear regression** concerns modeling the relationship
 
 $$Y = \beta_0 + \beta_1 X + \epsilon.$$
-Here $X$ is called a covariate (or independent variable) and $Y$ is called a response variable (or dependent variable). $\epsilon$ is used here to absorb any unexplained effect, they are also called the random noise, or random error.  
+Here $X$ is called a covariate (or independent variable) and $Y$ is called a outcome variable (or response, dependent variable). $\epsilon$ is used here to absorb any unexplained effect, they are also called the random noise, or random error. 
 
-The parameters can be estimated through 
+Once we collect a set of observations $\{x_i, y_i\}$, $i = 1, \ldots, n$, the **least square** approach means that we want to find a line to minimize the following objective function:
 
-$$\widehat \beta_1 = \frac{\sum_{i=1}^n (y_i - \bar y)(x_i - \bar x)}{\sum_{i=1}^n (x_i - \bar x)^2}$$
+$$\{\hat \beta_0, \hat \beta_1\} = \underset{\beta_0, \beta_1}{\arg\min} \frac{1}{n} \sum_{i=1}^n \big( y_i - \beta_0 - \beta_1 x_i \big)^2$$
+It is OK to not be familiar with this notation (which is about numerical optimization), but the term $y_i - \beta_0 - \beta_1 x_i$ means how $y_i$ deviates from the line you defined, $\beta_0 - \beta_1 x_i$, for subject $i$, and sum over all the squares of those residuals. You can visualize these residual terms in the following plot:
+
+```{r echo = FALSE}
+    # fitting a linear regression
+    fit = lm(Mort~ Lat, data = skincancer)
+
+    par(mar = c(4,4,0.5,0.5))
+    plot(Mort ~ Lat, data = skincancer, pch = 19, col = "deepskyblue",
+         xlab = "Latitude", ylab = "Mortality Rate")
+    
+    # the fitted regression line
+    abline(fit, col = "darkorange", lwd = 2)
+    
+    # add the residual of each observation
+    for (i in 1:nrow(skincancer)) 
+      segments(skincancer$Lat[i], fit$fitted.values[i],
+               skincancer$Lat[i], skincancer$Mort[i])
+```
+
+By altering the intercept and slope of this fitting line, we want to achieve the smallest sum of square errors. Interestingly, there is an analytic solution to this problem. The optimal parameter estimates can be calculated using the formula:
+
+$$\widehat \beta_1 = \frac{\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)}{\sum_{i=1}^n (x_i - \bar x)^2}$$
 $$\widehat \beta_0 = \bar y - \widehat \beta_1 \bar x $$
+Of course, this can be performed in `R`. 
 
+## Fitting Simple Linear Regressions
+
+The `lm()` function is already included in the base `R`. Hence, you can directly fit the model. 
+
+```{r}
+    # fitting a linear regression
+    fit = lm(Mort ~ Lat, data = skincancer)
+```
+
+Please be aware of the syntax here: 
+
+  * Usually you specify the dataset using `data =`. The data contains properly named columns. In this case, the columns are `Mort` and `Lat`. To check the names of a data, you may use `colnames()` function.
+  * The `~` sign separates the covariate on the right hand side and the outcome variable on the left hand side.
+
+Now we can check the model fitting:
+
+```{r}
+    summary(fit)
+```
+
+The summary provides many useful information:
+
+  * `Call` restates the model specification.
+  * `Residuals` is a summary of all $e_i = y_i - \hat\beta_0 - \hat\beta_1 x_i$ terms. We usually do not use them unless for model diagnostics.
+  * `Coefficients` contains all estimated parameter and their corresponding p-values (in the last column `Pr(>|t|)`) if testing if it is zero (Null hypothesis) or not (Alternative). For example, `Lat` (latitude) is a highly significant variable. Each unit increase of `Lat` would increase `Mort` by 
+  * `Residual standard error` is another summary of the residuals. Here the degrees of freedom refers to the estimation of the variance of residuals. We have seen this in the $t$-test previously. 
+  * `Multiple R-squared` measures the proportion of the variance in the response variable $Y$ of this regression model that can be explained by the predictor ($X$). It is also the squared version of a quantity called `Multiple R`, which is the Pearson correlation between the observed $Y$ values and the fitted regression line $\hat\beta_0 + \hat\beta_1 x_i$. This quantity ranges between 0 and 1, with smaller values being a very poor fitting and 1 means a perfect fitting. 
+  * `Adjusted R-squared` is a modified version of `Multiple R-squared` since this previous one will only increase as the number of variables in the model increases, regardless of whether they are useful or not. The  `Adjusted R-squared` is defined as $1 - \frac{(1-R^2)(n-1)}{n-p-1}$ which takes the number of predictors ($p$) into account. We will see more of this in the multiple linear regression part.  
+  * `F-statistic` and the associated p-value refers to an overall test of this model. This means that we are jointly testing if all of the coefficients are zero. Note that this quantity is usually highly significant because the intercept term in most models are nonzero. This is related to an [ANOVA (analysis of variance)](https://en.wikipedia.org/wiki/Analysis_of_variance) which can be used to jointly test if several variables are significant overall. However, that is beyond the scope of this class. 
+
+To obtain some detailed results, you can further extract results from the fitted `R` object (`fit`). This is performed by a `$` after that. The following code shows some of them. 
+
+```{r}
+  # the fitted values
+  fit$fitted.values[1:5]
+
+  # the regression coefficients
+  fit$coefficients
+```
+
+## Predicting a New Subject
+
+With the calculated coefficients, it is very easy to predict a new subject. For example, if we are interested in a location with `Lat`$= 40$, then we would simply perform 
+
+$$389.189351 - 5.977636 \times 40 = 150.0839$$
+which predict that the mortality rate is 150.0839 per 10 million people. We can also perform this prediction using pre-defined `R` functions. However, this requires setting up a new data frame with the same structure as the training data:
+
+```{r}
+  testdata = data.frame("Lat" = 40)
+  testdata
+  predict(fit, newdata = testdata)
+```
 
 ## Practice questions 
 
+  1. Fit a simple linear regression that uses father's height to predict the Child's height using the `GaltonFamilies` dataset. 
+      * For each inch increase of father's height, how much inch the child is expected to increase?
+      * Is this variable significant?
+      * What is the R-squared from this model? And from this information, what is the correlation between the fitted value and the outcome?
+      * Predict a new subject with father's height being 70 inches. 
+  
+```{r class.source = NULL, eval = FALSE}
+  summary(lm(childHeight~father, data = GaltonFamilies))
+```
+  
+  2. Based on your understanding of a simple linear regression, is this model a good fitting? 

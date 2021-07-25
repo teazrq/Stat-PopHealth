@@ -45,7 +45,7 @@ There are also several questions about more advanced topics in linear regression
 ## Reading Material
 
   * [Correlation and Independence](notes/week4/TBL-Correlation.html) 
-  * Simple Linear Regression
+  * [Simple Linear Regression](notes/week4/TBL-SLR.html) 
   * Multiple Linear Regression and Confounding Variables
 
 ## Discussion Session
