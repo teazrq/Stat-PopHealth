@@ -2860,9 +2860,11 @@ div.tocify {
 <div id="basic-concept" class="section level2">
 <h2>Basic Concept</h2>
 <p>Multiple linear regression is essentially adding more predictors. A mathematical representation is</p>
-<p><span class="math display">\[Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p  + \epsilon.\]</span> It is not straight forward to solve these parameters when given a set of data. This involves applications of some linear algebra:</p>
-<p><span class="math display">\[\widehat{\boldsymbol \beta}= (\mathbf{X}^\text{T} \mathbf{X})^{-1} \mathbf{X}^\text{T} \mathbf{y} \]</span></p>
-<p>However, this done using the <code>lm()</code> function. For example, if we want to include the longitude in the skin cancer data, we can specify two variables using the <code>+</code> sign in the right hand side of <code>~</code>:</p>
+<p><span class="math display">\[Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p  + \epsilon.\]</span> And the idea of the optimization is also similar that, we want to minimize the squared errors given a set of observed data.</p>
+<p><span class="math display">\[\underset{\beta_0, \beta_1, \ldots, \beta_p}{\arg\min} \frac{1}{n} \sum_{i=1}^n \big( y_i - \beta_0 - \beta_1 x_{i1} - \beta_2 x_{i2} \cdots - \beta_2 x_{ip}\big)^2\]</span></p>
+<p>It is not straight forward to solve these parameters when given a set of data. This involves applications of some linear algebra:</p>
+<p><span class="math display">\[\widehat{\boldsymbol \beta}= (\mathbf{X}^\text{T} \mathbf{X})^{-1} \mathbf{X}^\text{T}\mathbf{y}\]</span></p>
+<p>This can be done using the <code>lm()</code> function. For example, if we want to include the longitude in the skin cancer data, we can specify two variables using the <code>+</code> sign in the right hand side of <code>~</code>:</p>
 <pre class="r fold-show"><code>    skincancer = read.table(&quot;skin.txt&quot;, header = TRUE)
     # fitting a multiple linear regression
     fit = lm(Mort~ Lat + Long, data = skincancer)
