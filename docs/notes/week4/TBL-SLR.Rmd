@@ -133,7 +133,7 @@ which predict that the mortality rate is 150.0839 per 10 million people. We can 
   predict(fit, newdata = testdata)
 ```
 
-## Practice questions 
+## Practice Questions 
 
   1. Fit a simple linear regression that uses father's height to predict the Child's height using the `GaltonFamilies` dataset. 
       * For each inch increase of father's height, how much inch the child is expected to increase?

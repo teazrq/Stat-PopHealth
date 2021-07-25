@@ -23,113 +23,165 @@ output:
   knitr::opts_chunk$set(collapse=TRUE)
 ```
 
-## Basic concept
+## Basic Concept
 
-Correlation is one of the most commonly used concept in statistics when analyzing the relationship between variables. The most popular mathematical definition, [Pearson correlation](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient) is named after [Karl Pearson](https://en.wikipedia.org/wiki/Karl_Pearson). However, the concept was proposed by [Francis Galton](https://en.wikipedia.org/wiki/Francis_Galton) in 1888. Galton studied the association between the average height of parents and the height of their adult child. The data can be loaded from the `HistData` package. 
+Multiple linear regression is essentially adding more predictors. A mathematical representation is 
 
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p  + \epsilon.$$
+It is not straight forward to solve these parameters when given a set of data. This involves applications of some linear algebra:
+
+$$\widehat{\boldsymbol \beta}= (\mathbf{X}^\text{T} \mathbf{X})^{-1} \mathbf{X}^\text{T} \mathbf{y} $$
+
+However, this done using the `lm()` function. For example, if we want to include the longitude in the skin cancer data, we can specify two variables using the `+` sign in the right hand side of `~`:
+
+```{r}
+    skincancer = read.table("skin.txt", header = TRUE)
+    # fitting a multiple linear regression
+    fit = lm(Mort~ Lat + Long, data = skincancer)
+    summary(fit)
+```
+
+Most of the quantities in this output have similar meanings as a simple linear regression. Except that we have a new variable longitude. However, longitude is not a significant variable. In most cases, you could remove it from the model. 
+
+Predictions can also be made using the `predict()` function by specifying one or more data points. You can also do this by hand by simply plugging in the estimated coefficients to the linear equation. 
+
+```{r}
+  testdata = data.frame("Lat" = c(40, 45), "Long" = c(80, 100))
+  testdata
+  
+  # predict this pre-specified testing data
+  predict(fit, testdata)
+  
+  # predict the state of Illinois, which is the 12th row
+  predict(fit, skincancer[12, ])
+```
+
+## Categorical Predictors
+
+The `Ocean` variable is binary that indicates if a state is next to an ocean. There are also other cases where we may have a categorical variable with many categories. There are two types of categorical variables:
+
+  * Ordinal: the numbers representing each category is ordered, e.g., how many children in a family. Oftentimes nominal data are treated as a continuous variable.
+  * Nominal: they are not ordered and can be represented using either numbers or letters, e.g., ethnic group
+
+Nominal data is a more involved topic and we will discuss them later in the logistic regression session. In fact, since `Ocean` is binary and it can be treated as either ordinal or nominal and the model would not change. The following code (`as.factor()`) can be used to specify a nominal categorical variable
+
+```{r}
+    fit = lm(Mort~ Lat + Long + as.factor(Ocean), data = skincancer)
+    summary(fit)
+```
+
+You can notice that in the output, there is a new specification of the parameter estimate, `as.factor(Ocean)1`. This means that the parameter is for estimating the effect of `Ocean`$= 1$. You may wonder where is the effect of category 0. Since this variable has only two categories, we only need one parameter to describe its effect. When`Ocean`$= 1$, we can simply remove the contribution of this parameter. You can validate the result using the following testing data:
+
+```{r}
+  testdata = data.frame("Lat" = c(40, 40), 
+                        "Long" = c(100, 100),
+                        "Ocean" = c(0, 1))
+  testdata
+  
+  # predict and compare the two results
+  predict(fit, testdata)
+```
+
+## Specifying Higher Order Terms
+
+Sometimes a linear relationship is not sufficient to model the relationship, and we want to include higher order terms and also interactions to explain the effect. For example, we could add the squared term of latitude and the iteration between latitude and longitude to the model. 
+
+```{r}
+    fit = lm(Mort~ Lat + Long + as.factor(Ocean) + I(Lat^2) + I(Lat*Long), data = skincancer)
+    summary(fit)
+```
+
+The prediction can be done using the same dataset we specified before:
+
+```{r}
+  predict(fit, testdata)
+```
+
+Do you notice the change of significance? What do you think is the cause? Which variable(s) would you like to remove?
+
+## Collinearity
+
+Collinearity refers to the situation that the covariates are (almost) linearly dependent. This is a very severe problem for linear regression. Let's look at an example where we have $Y = X_1 + X_2 + \epsilon$, and variables $X_1$ and $X_2$ are highly correlated with each other. The true parameter should be 1 and 1, respectively. Since we know the true relationship, both variables should be highly significant. However, this is not the case while we fit the regression model. Moreover, the parameter estimates become 6.36779 and -4.34668, which is awfully wrong. However, their difference is almost 2, and this model explained more than 75% of the variation. Can you think of why?
+
+```{r}
+  set.seed(1)
+  x1 = rnorm(100)
+  x2 = x1 + rnorm(100, sd = 0.01)
+  y = x1 + x2 + rnorm(100)
+  fit = lm(y~ x1 + x2)
+  summary(fit)
+```
+
+On the other hand, if we create independent covariates with exactly the same model, we see the expected results. 
+```{r}
+  set.seed(1)
+  x1 = rnorm(100)
+  x2 = rnorm(100)
+  y = x1 + x2 + rnorm(100)
+  fit = lm(y~ x1 + x2)
+  summary(fit)
+```
+
+In practice, you may want to eliminate variables with "almost the same definition", which can be highly correlated. However, this is inevitable if we have a large number of variables, $p$. And eventually, when $p$ is close or larger than the sample size $n$, a linear regression model cannot be used. In that case, we may need to decide which variable to use, instead of using all of them. This concept is called "variable selection" in high-dimensional data, and many machine learning models can be used to address this problem. Although we will not cover that topic in this course, a simple strategy called the **step-wise regression** could be used. It simply adding or subtracting variables from the model one-by-one based on the p-value. 
+
+## Confunding Variables
+
+Let's imaging a relationship with $X$ (e.g. a genetic factor) causes both $Z$ (a symptom) and $Y$ (another symptom), which can be demonstrated using the following code:
+
+```{r}
+  set.seed(1)
+  X = rnorm(100)
+  Z = X + rnorm(100, sd = 0.5)
+  Y = X + rnorm(100, sd = 0.5)
+```
+
+If we simply regress $Y$ on $Z$, we may conclude that $Z$ would increase $Y$, as $Z$ is highly significant. However, this is not really the true relationship. 
+
+```{r}
+  summary(lm(Y~Z))$coefficients
+```
+
+In this case, we should also control for the effect of $X$, and in this case, $Z$ is not significant anymore. This means, given the information of $X$, $Z$ does not affect $Y$. 
+
+```{r}
+  summary(lm(Y~Z+X))$coefficients
+```
+
+In this case, $X$ is a confounding variable. Not including appropriate confounding variables could often lead to wrong conclusions. Commonly used confounding variables are age, gender and race. However, you should always decide that based on the specific study. Here are some comments on confounding variables:
+
+  * Confounding is a causal concept and most statistical methods cannot directly claim causal effect. Whether the result you found is a causal effect should mainly relying on the domain knowledge. 
+  * Confounding variables, if included in the model, should stay there even they are not significant.
+
+## Practice Questions 
+
+  1. Fit a multiple linear regression models the Child's height using the `GaltonFamilies` dataset. You should consider the following terms in your regression:
+    * Father's height
+    * Mother's height
+    * An interaction between father and mother's heights
+    * Number of children in the family, as a nominal categorical variable 
+    
 ```{r}
   library(HistData)
   data(GaltonFamilies)
-  GaltonFamilies
+  summary(lm(childHeight ~ father + mother + I(father*mother) + as.factor(children), data = GaltonFamilies))
 ```
 
-The sample Pearson correlation between two variables, $x$ and $y$, is defined as 
-
-$$ r_{xy} = \frac{\sum_i (x_i - \bar x)(y_i - \bar y)}{\hat\sigma_x \hat\sigma_y }$$
-where the $\hat\sigma_x$ and $\hat\sigma_y$ are the sample standard deviations. Here are some explications of this formula:
-
-  * The numerator quantifies how much the two variables varies together (from their respective centers $\bar x$ and $\bar y$)
-  * The denominator is the product of two standard deviations, which scale the whole quantity to be within [-1, 1]
-  * When this correlation is -1 or 1, there is a perfect correlation meaning that $x_i - \bar x$ equals $c \times (y_i - \bar y)$ for all subject $i$, with some constant $c$. This means that, once we center both variables, one variable is just a scale change from the other. And the sign of that scaling factor determines if its negative or positive correlation. 
-
-## Calcucating and interpreting the sample correlation
-
-To calculate the Pearson correlation, we can use the `cor()` function
-
-```{r}
-  cor(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight)
-  plot(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight, 
-       xlab = "Average Parent Height", ylab = "Child Height",
-       pch = 19, cex = 0.5, main = "Galton Data", col = "deepskyblue")
-  legend("bottomright", "Correlation = 0.321", cex = 1.5)
-```
-
-As we can see, there is a positive trend how two variables move together. However, this correlation is not very strong. In practice, it is difficult to decide whether a correlation is strong or not. [Cohen (1988)](https://scholar.google.com/scholar_lookup?title=Statistical%20power%20analysis%20for%20the%20behavioral%20sciences&author=J.%20Cohen&publication_year=1988) suggests that 0.1 is weak, 0.3 is moderate, while 0.5 is strong. However, this is a very field-specific concept. For example, [Gignac and Szodorai (2016)](https://www.sciencedirect.com/science/article/pii/S0191886916308194?casa_token=Vw-n84luM58AAAAA:PH6uejJ7c6ozR0XYjuxezLzIjgtpZ6FDlNsEDCbDt-whn0dP7jgTnJrUqDHyfq6psRfIR9wgMQ) reported that less than $3\%$ of correlations reported in the psychology literature were found to be as large as 0.5. In biomedical studies, it is also rare to see very strong correlation between a single biomarker and a certain disease. Hence, you need to make the judgment accordingly. The following plots of different correlation magnitude may give you an idea:
-
-```{r out.width = "90%", class.source = NULL}
-  library(MASS)
-  set.seed(2)
-  par(mfrow=c(2, 3)) # this sets multiple plots
-  par(mar=c(1, 1, 2, 1)) # this sets margins for each of them
-  corxy = c(-0.5, 0, 0.25, 0.5, 0.7, 0.9)
-  for (i in 1:6)
-  {
-    # this code generates variables from a multivariate normal distribution with correlated variables
-    xy = mvrnorm(500, mu = c(0, 0),
-                 Sigma = matrix(c(1, corxy[i], corxy[i], 1), 2, 2))
-    plot(xy[, 1], xy[, 2], xaxt='n', yaxt='n',
-         pch = 19, cex = 0.5, col = "darkorange",
-         main = paste("Correlation approx.", corxy[i]))
-  }
-```
-
-## Testing the significance 
-
-A statistical test can be used to determine if the **population correlation coefficient** is different from zero or not. Note that what we introduced before is the **sample correlation coefficient**, which can be calculated from a collected sample. However, this sample is only a representation of the entire population, which has a true correlation $\rho_{xy}$. Hence, we may be able to make inference about $\rho_{xy}$ from the collected samples. Formally, the hypothesis is 
-
-$$H_0: \rho_{xy} = 0 \quad \text{vs.}  \quad H_1: \rho_{xy} \neq 0.$$
-In fact, the test statistic is very simple, 
-
-$$ t = \frac{r_{xy} \sqrt{n-2}}{\sqrt{1 - r_{xy}^2}},$$
-
-which follows a $t$ distribution with $n-2$ degrees of freedom. This can be done completely with `R`. 
-
-```{r}
-  cor.test(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight)
-```
-
-The result turns out to be highly significant. However, keep in mind that this is only testing if the true correlation is zero or not. It does not reflect whether the correlation is strong or not. Large sample size will usually lead to higher significance. 
-
-## Relationship with independence
-
-**Uncorrelated should be not confused with independence**. This following example generates uncorrelated (theoretically) variables 
-
-```{r out.width = "90%", fig.height=4}
-  set.seed(1)
-  x = rnorm(10000)
-  y = x + rnorm(10000, sd = 0.5)
-  z = y^2
-  par(mfrow=c(1, 2))
-  par(mar=c(4, 4, 1, 1))
-  plot(x, y, pch = 19, cex = 0.2)
-  plot(x, z, pch = 19, cex = 0.2)
-  cor(x, y)
-  cor(x, z)
-```
-
-Its easy to see that although $x$ and $y$ have very high correlation (0.899), the sample correlation between $x$ and $z$ is almost zero (-0.022). However, we cannot say that $x$ and $z$ are independent. There is a precise [definition of independence](https://en.wikipedia.org/wiki/Independence_(probability_theory)) in statistics by stating the joint distribution as the product of two marginal distributions. But, that concept could be a bit difficult to explain to a beginner. However, you can think about this conceptual understanding of independence: 
-
-  * If we restrict ourselves to a small range of $x$, and look at what is the distribution of $y$ given that $x$ is within that range, then that distribution (including mean, spread, etc) of $y$ is the same regardless of the specific range you considered for $x$. 
-
-This is clearly not the case between $x$ and $y$ (or $x$ and $z$) in our previous plot, since as $x$ changes, the mean of $y$ (or $z$) is shifting. 
-
-On the opposite side, if two variables are independent, then the correlation has to be 0. But keep in mind that this is a statement regarding the entire population, not the small sample you collected. 
-
-## Other types of correlation measures
-
-The Pearson correlation has some assumptions associated with it. One of the most crucial one is that both variables should be normally distributed. You may still use the Pearson correlation if there is a mild violation. However, you should consider rank based correlation, such as [Spearman](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient) and [Kendall's $\tau$](https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient) in other cases. 
-
-
-## Practice questions 
-
-  1. Estimate and test the significance of the correlation between the father height and mother height in the `GaltonFamilies` dataset. Do you think the two variables are independent?
+  2. Do you notice any problem with this model? What could be the causes? Now, instead of defining the number of children as a nominal categorical variable, treat it as an ordinal one (continuous). What is the most significant variable in this new model?
   
-```{r class.source = NULL, eval = FALSE}
-  cor(GaltonFamilies$father, GaltonFamilies$mother)
-  cor.test(GaltonFamilies$father, GaltonFamilies$mother)
+```{r}  
+  summary(lm(childHeight ~ father + mother + I(father*mother) + children, data = GaltonFamilies))
 ```
 
-  2. Read Table 1 of [this paper](papers/Tosepu2020). Which variable is considered significantly correlated with the COVID19 cases count? What type of correlation is used in this paper? And why?
+  3. The result still contradict with our understanding that both father and mother's heights would affect a child's height. Remove the interation term and refit the model. 
+  
+```{r}  
+  summary(lm(childHeight ~ father + mother + children, data = GaltonFamilies))
+```
+
+  
+In fact, since `Ocean` is binary, it can be treated as either ordinal or nominal and the model would not change.
+
+  * Can you think of examples in which not including a confuding variable would cause a misleading result? 
 
 
 
