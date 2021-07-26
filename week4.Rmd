@@ -45,7 +45,7 @@ There are also several questions about more advanced topics in linear regression
 ## Reading Material
 
   * [[Correlation and Independence](notes/week4/TBL-Correlation.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week4/TBL-Correlation.Rmd', text = 'Source File')`] 
-  * [[Simple Linear Regression](notes/week4/TBL-SLR.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week4/TBL-SLR.Rmd', text = 'Source File')`] [[Skin Cancer Data](notes/week4/skin.txt)]
+  * [[Simple Linear Regression](notes/week4/TBL-SLR.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week4/TBL-SLR.Rmd', text = 'Source File')`] [[Skin Cancer Data](data/skin.txt)]
   * [[Multiple Linear Regression and Confounding Variables](notes/week4/TBL-MLR.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week4/TBL-MLR.Rmd', text = 'Source File')`]
 
 ## Discussion Session
