@@ -186,4 +186,3 @@ In this case, $X$ is a confounding variable. Not including appropriate confoundi
   4. Can you think of examples in which not including a confounding variable would cause a misleading result? 
 
   5. Read Table 2 in [Goodings et al. (2011)](papers/Gooding2011.pdf) and contrasting Model 2 and Model 3. What could be the cause that the category `Multiethnic` parameter estimate changed quite significantly?
-

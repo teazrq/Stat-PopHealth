@@ -2864,36 +2864,122 @@ background-color: #CCDDFF;
 </style>
 <div id="questions-1" class="section level2">
 <h2>Questions 1</h2>
-<p>The following is the output from a Pearson correlation and the associated test. Which statement is correct?</p>
+<p>In 1852, William Farr published a report of the Registrar-General on mortality due to cholera in England in the years 1848-1849. Farr believed that cholera arose from bad air “miasma” associated with low elevation above the River Thames. The data collected by Farr is provided in the <code>HistData</code> package. Use the following code to load the data</p>
+<pre class="r fold-show"><code>  library(HistData)
+  data(Cholera)</code></pre>
+<p>In this data, <code>cholera_drate</code> is the death rate, and we will perform correlation analysis with the variable <code>elevation</code>. What is the Pearson correlation between these two variables?</p>
+<pre class="r fold-show"><code>  cor(Cholera$cholera_drate, Cholera$elevation)</code></pre>
+<pre><code>## [1] -0.4823152</code></pre>
+<pre class="r fold-show"><code>  cor(Cholera$cholera_deaths, Cholera$elevation)</code></pre>
+<pre><code>## [1] -0.3819684</code></pre>
+<pre class="r fold-show"><code>  cor(Cholera$popn, Cholera$elevation)</code></pre>
+<pre><code>## [1] -0.04254422</code></pre>
+<pre class="r fold-show"><code>  cor(Cholera$annual_deaths, Cholera$elevation)</code></pre>
+<pre><code>## [1] -0.3068787</code></pre>
+<ul>
+<li><code>A</code> -0.4823152</li>
+<li><code>B</code> -0.3819684</li>
+<li><code>C</code> -0.0425442</li>
+<li><code>D</code> -0.3068787</li>
+</ul>
+<p><code>A</code></p>
+</div>
+<div id="questions-2" class="section level2">
+<h2>Questions 2</h2>
+<p>Test the significance of this correlation. What is the p-value?</p>
+<pre class="r fold-show"><code>  cor.test(Cholera$cholera_drate, Cholera$elevation)$p.value</code></pre>
+<pre><code>## [1] 0.00216552</code></pre>
+<pre class="r fold-show"><code>  cor.test(Cholera$cholera_deaths, Cholera$elevation)$p.value</code></pre>
+<pre><code>## [1] 0.01795859</code></pre>
+<pre class="r fold-show"><code>  cor.test(Cholera$popn, Cholera$elevation)$p.value</code></pre>
+<pre><code>## [1] 0.7997937</code></pre>
+<pre class="r fold-show"><code>  cor.test(Cholera$annual_deaths, Cholera$elevation)$p.value</code></pre>
+<pre><code>## [1] 0.06092543</code></pre>
+<ul>
+<li><code>A</code> 0.0021655</li>
+<li><code>B</code> 0.0179585</li>
+<li><code>C</code> 0.7997937</li>
+<li><code>D</code> 0.0609254</li>
+</ul>
+<p><code>A</code></p>
+</div>
+<div id="questions-3" class="section level2">
+<h2>Questions 3</h2>
+<p>The following is the output from a Pearson correlation and the associated test from another dataset. Which statement is correct?</p>
 <pre class="r questioncode"><code>  x = rnorm(1000)
   y = 0.1*x + rnorm(1000)
   cor(x, y)</code></pre>
-<pre><code>## [1] 0.1029459</code></pre>
+<pre><code>## [1] 0.05626698</code></pre>
 <pre class="r questioncode"><code>  cor.test(x, y)</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 
 ## data:  x and y
-## t = 3.2696, df = 998, p-value = 0.001114
+## t = 1.7804, df = 998, p-value = 0.07532
 ## alternative hypothesis: true correlation is not equal to 0
 ## 95 percent confidence interval:
-##  0.04121588 0.16389306
+##  -0.005746147  0.117848985
 ## sample estimates:
-##       cor 
-## 0.1029459</code></pre>
+##        cor 
+## 0.05626698</code></pre>
 <ul>
 <li><code>A</code> The correlation between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> is very weak</li>
 <li><code>B</code> The the correlation between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> is quite strong since it is highly significant (0.001)</li>
 <li><code>C</code> The chance that <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are not correlated is less than 0.001</li>
-<li><code>D</code> The probability that the correlation falls in between 0.0398 and 0.1625 is 95%</li>
+<li><code>D</code> The chance that the true correlation falls in between 0.0398 and 0.1625 is 95%</li>
 </ul>
 <p>The correct answer is <code>A</code> since significance and hypothesis testings cannot be interpreted as probabilities.</p>
 </div>
-<div id="questions-2" class="section level2">
-<h2>Questions 2</h2>
-<pre class="r fold-show"><code>  library(HistData)
-  data(&quot;Cholera&quot;)
-  summary(lm(cholera_drate ~ as.factor(water) + elevation, data = Cholera))</code></pre>
+<div id="questions-4" class="section level2">
+<h2>Questions 4</h2>
+<p>Perform a linear regression that uses the death rate as the outcome and elevation as the covariate. Answer two questions: 1) For each unit change of elevation, what is the corresponding change of death rate; 2) Is elevation a significant variable if we use an alpha level at 0.001?</p>
+<pre class="r fold-show"><code>  fit = lm(cholera_drate ~ elevation, data = Cholera)
+  summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = cholera_drate ~ elevation, data = Cholera)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -54.31 -32.27 -21.66  23.85 121.19 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  83.8117     9.3460   8.968 1.05e-10 ***
+## elevation    -0.4388     0.1328  -3.304  0.00217 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 47.23 on 36 degrees of freedom
+## Multiple R-squared:  0.2326, Adjusted R-squared:  0.2113 
+## F-statistic: 10.91 on 1 and 36 DF,  p-value: 0.002166</code></pre>
+<ul>
+<li><code>A</code> Increase by 0.4388; Yes</li>
+<li><code>B</code> Decrease by 0.4388; Yes</li>
+<li><code>C</code> Increase by 0.4388; No</li>
+<li><code>D</code> Decrease by 0.4388; No</li>
+</ul>
+<p><code>D</code>. Since 0.00217 is larger than 0.001.</p>
+</div>
+<div id="questions-5" class="section level2">
+<h2>Questions 5</h2>
+<p>Base on this regression model, predict the death rate when the elevation is 80.</p>
+<pre class="r fold-show"><code>  newdata = data.frame(&quot;elevation&quot; = 80)
+  predict(fit, newdata)</code></pre>
+<pre><code>##        1 
+## 48.70548</code></pre>
+<ul>
+<li><code>A</code> 48.70548</li>
+<li><code>B</code> 83.8117</li>
+<li><code>C</code> 101.3637</li>
+<li><code>D</code> 39.9317</li>
+</ul>
+<p><code>A</code></p>
+</div>
+<div id="questions-6" class="section level2">
+<h2>Questions 6</h2>
+<p>Add a new covariate <code>water</code> into the previous linear regression, and treat it as a nominal categorical variable. Answer two questions: 1) How many categories does water have; 2) Is elevation significant (at 0.05 level)?</p>
+<pre class="r fold-show"><code>  summary(lm(cholera_drate ~ as.factor(water) + elevation, data = Cholera))</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = cholera_drate ~ as.factor(water) + elevation, data = Cholera)
@@ -2914,27 +3000,69 @@ background-color: #CCDDFF;
 ## Residual standard error: 35.53 on 34 degrees of freedom
 ## Multiple R-squared:  0.5899, Adjusted R-squared:  0.5537 
 ## F-statistic:  16.3 on 3 and 34 DF,  p-value: 9.785e-07</code></pre>
-<pre class="r fold-show"><code>  summary(lm(cholera_drate ~ elevation, data = Cholera))</code></pre>
+<ul>
+<li><code>A</code> 2; Yes</li>
+<li><code>B</code> 3; Yes</li>
+<li><code>C</code> 2; No</li>
+<li><code>D</code> 3; No</li>
+</ul>
+<p><code>D</code></p>
+</div>
+<div id="questions-7" class="section level2">
+<h2>Questions 7</h2>
+<p>If you noticed the change of significance (at 0.05 level) of elevation. What do you think is the cause?</p>
+<ul>
+<li><code>A</code> Different water supply regions are at very different elevation level, making the two variables essentially co-linear.</li>
+<li><code>B</code> The water supply regions variable is taking effects away from elevation, making it insignificant</li>
+<li><code>C</code> This is a confounding variable issue and water supply regions is the true cause</li>
+<li><code>D</code> All of the others</li>
+</ul>
+<p><code>D</code></p>
+</div>
+<div id="questions-8" class="section level2">
+<h2>Questions 8</h2>
+<p>A researcher decide to add the poor rate (<code>poor_rate</code>, a tax on property levied in each parish) into the model. This is a continuous variable. Perform this linear model using R. Which of the following conclusions is correct?</p>
+<pre class="r fold-show"><code>  summary(lm(cholera_drate ~ as.factor(water) + elevation + poor_rate, data = Cholera))  </code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = cholera_drate ~ elevation, data = Cholera)
+## lm(formula = cholera_drate ~ as.factor(water) + elevation + poor_rate, 
+##     data = Cholera)
 ## 
 ## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -54.31 -32.27 -21.66  23.85 121.19 
+##     Min      1Q  Median      3Q     Max 
+## -67.976 -17.120   2.699  12.829  54.844 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  83.8117     9.3460   8.968 1.05e-10 ***
-## elevation    -0.4388     0.1328  -3.304  0.00217 ** 
+##                            Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                53.55741   13.80552   3.879 0.000473 ***
+## as.factor(water)New River -60.81001    9.80506  -6.202 5.33e-07 ***
+## as.factor(water)Kew       -58.61674   16.31388  -3.593 0.001050 ** 
+## elevation                  -0.11184    0.08548  -1.308 0.199790    
+## poor_rate                 921.80571  155.89236   5.913 1.25e-06 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 47.23 on 36 degrees of freedom
-## Multiple R-squared:  0.2326, Adjusted R-squared:  0.2113 
-## F-statistic: 10.91 on 1 and 36 DF,  p-value: 0.002166</code></pre>
-<pre class="r fold-show"><code>  cor(Cholera$elevation, Cholera$cholera_drate)</code></pre>
-<pre><code>## [1] -0.4823152</code></pre>
+## Residual standard error: 25.13 on 33 degrees of freedom
+## Multiple R-squared:  0.8009, Adjusted R-squared:  0.7767 
+## F-statistic: 33.18 on 4 and 33 DF,  p-value: 3.882e-11</code></pre>
+<ul>
+<li><code>A</code> The poor rate variable explained a significant amount of variation of the death rate</li>
+<li><code>B</code> The poor rate variable did not make much improvement since the F-statistic <span class="math inline">\(p\)</span> value remained similar</li>
+<li><code>C</code> The poor rate variable is more significant than all other variables</li>
+<li><code>D</code> The effect of poor rate is much larger than other variables because its estimated parameter is much larger</li>
+</ul>
+<p><code>A</code></p>
+</div>
+<div id="questions-9" class="section level2">
+<h2>Questions 9</h2>
+<p>Read Tosepu et al. (2020), which was provide in the practice question of the reading material. What can be the potential issues that makes the conclusion invalid, from a statistical point of view?</p>
+<ul>
+<li><code>A</code> The sample size is too small</li>
+<li><code>B</code> The model does not control for enough factors that may potentially affect the infection rate</li>
+<li><code>C</code> The cases could be underestimated since people may not get tested for COVID</li>
+<li><code>D</code> All of the others</li>
+</ul>
+<p><code>D</code></p>
 </div>
 
 
