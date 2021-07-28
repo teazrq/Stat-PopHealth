@@ -2867,7 +2867,7 @@ background-color: #CCDDFF;
 <p>In 1852, William Farr published a report of the Registrar-General on mortality due to cholera in England in the years 1848-1849. Farr believed that cholera arose from bad air “miasma” associated with low elevation above the River Thames. The data collected by Farr is provided in the <code>HistData</code> package. Use the following code to load the data</p>
 <pre class="r fold-show"><code>  library(HistData)
   data(Cholera)
-  write.csv(Cholera, &quot;Cholera.csv&quot;)</code></pre>
+  write.table(data.frame(Cholera), &quot;Cholera.txt&quot;)</code></pre>
 <p>In this data, <code>cholera_drate</code> is the death rate, and we will perform correlation analysis with the variable <code>elevation</code>. What is the Pearson correlation between these two variables?</p>
 <pre class="r fold-show"><code>  cor(Cholera$cholera_drate, Cholera$elevation)</code></pre>
 <pre><code>## [1] -0.4823152</code></pre>
@@ -2910,19 +2910,19 @@ background-color: #CCDDFF;
 <pre class="r questioncode"><code>  x = rnorm(1000)
   y = 0.1*x + rnorm(1000)
   cor(x, y)</code></pre>
-<pre><code>## [1] 0.08918815</code></pre>
+<pre><code>## [1] 0.1307894</code></pre>
 <pre class="r questioncode"><code>  cor.test(x, y)</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 
 ## data:  x and y
-## t = 2.8288, df = 998, p-value = 0.004765
+## t = 4.1676, df = 998, p-value = 3.345e-05
 ## alternative hypothesis: true correlation is not equal to 0
 ## 95 percent confidence interval:
-##  0.02734626 0.15034994
+##  0.06935873 0.19123201
 ## sample estimates:
-##        cor 
-## 0.08918815</code></pre>
+##       cor 
+## 0.1307894</code></pre>
 <ul>
 <li><code>A</code> The correlation between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> is very weak</li>
 <li><code>B</code> The the correlation between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> is quite strong since it is highly significant (0.001)</li>
