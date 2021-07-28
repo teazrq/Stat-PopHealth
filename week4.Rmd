@@ -50,4 +50,4 @@ There are also several questions about more advanced topics in linear regression
 
 ## Discussion Session
 
-
+  * [Cholera Data](notes/week4/Cholera.csv)
