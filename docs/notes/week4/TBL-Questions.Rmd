@@ -35,6 +35,7 @@ In 1852, William Farr published a report of the Registrar-General on mortality d
 ```{r}
   library(HistData)
   data(Cholera)
+  write.csv(Cholera, "Cholera.csv")
 ```
 
 In this data, `cholera_drate` is the death rate, and we will perform correlation analysis with the variable `elevation`. What is the Pearson correlation between these two variables?
