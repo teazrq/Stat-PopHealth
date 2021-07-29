@@ -17,15 +17,37 @@ output:
   
   * Binary variables and Bernoulli distribution
   * Model the probability of a binary variable
+  * Odds ratio and relative risk
   * The logistic link
   * Logistic regression
   * Interpreting parameters in a logistic regression
   * Testing the significance of a variable
-  * Performing logistic regression in R
+  * Performing logistic regression in `R`
+  * Dealing with categorical predictors
   * Measuring the model accuracy
   * The ROC curve and area under the curve (AUC)
-  * Dealing with categorical predictors
 
-## Lecture Note
+## TBL Overview
 
-## R Examples
+You should **complete this reading material before** the TBL session on Wed, Aug 4. This week's TBL session focuses on calculating and interpreting some of the most popular quantities and models for disease frequencies. This includes odds ratio, relative risk and logistic regression. We will be using both simulated data and two recent papers: [Dagan et al. (2021)](notes/week5/papers/Dagan2021.pdf) and [O'Brien et al. (2020)](notes/week5/papers/OBrien2020.pdf).
+
+To successfully complete the questions in this TBL session, you should focus on the following topics while reading this material:
+
+  * Use R to compute and interpret the odds ratio, relative risk and their confidence intervals
+  * Apply the relative risk calculation to the vaccine effect size study
+  * Use R to perform logistic regression
+  * Read the output from R to evaluate the variables and the overall model fitting
+  * Interpreting the effects of variables in a logistic regression
+  * Use logistic regressions for prediction
+
+There are also several questions about more advanced topics in linear regression:
+
+  * Calculate and interpret the effect of categorical variables and their iterations in a logistic regression
+
+## Reading Material
+
+  * [Relative Risk and Odds Ratio]
+  * [Logistic Regression]
+
+## Discussion Session
+
