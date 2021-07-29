@@ -28,7 +28,7 @@ output:
   
 ## TBL Overview
 
-You should **complete this reading material before** the TBL session on Wed, July 28. This week's TBL session focuses on correlation and linear regression. To successfully complete the questions in this TBL session, you should focus on the following topics while reading the materials:
+You should **complete this reading material before** the TBL session on Wed, July 28. This week's TBL session focuses on correlation and linear regression. To successfully complete the questions in this TBL session, you should focus on the following topics while reading the materials.
 
   * Use R to compute and interpret the correlation between two variables
   * Understand the relationship and differences between correlation and independence 
@@ -47,7 +47,8 @@ There are also several questions about more advanced topics in linear regression
   * [[Correlation and Independence](notes/week4/TBL-Correlation.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week4/TBL-Correlation.Rmd', text = 'Source File')`] 
   * [[Simple Linear Regression](notes/week4/TBL-SLR.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week4/TBL-SLR.Rmd', text = 'Source File')`] [[Skin Cancer Data](data/skin.txt)]
   * [[Multiple Linear Regression and Confounding Variables](notes/week4/TBL-MLR.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week4/TBL-MLR.Rmd', text = 'Source File')`]
-  * [Cholera Data](notes/week4/Cholera.csv)
+  * We also use two papers as examples: [Gooding et al. (2011)](notes/week4/papers/Gooding2011.pdf) and [Tosepu et al. (2020)](notes/week4/papers/Tosepu2020.pdf)
+  * If you have trouble with the `HistData` package, here is the [Cholera Data](notes/week4/Cholera.csv).
 
 ## Discussion Session
 
