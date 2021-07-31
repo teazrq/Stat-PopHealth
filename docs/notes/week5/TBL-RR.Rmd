@@ -1,0 +1,164 @@
+---
+title: "TBL Reading (Week 4): Relative Risk"
+author: "Ruoqing Zhu"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+  options(width = 1000)
+  knitr::opts_chunk$set(fig.width=9, fig.height=6, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(class.source = "fold-show")
+  knitr::opts_chunk$set(collapse=TRUE)
+```
+
+## Background: 2 $\times$ 2 Contengency Table 
+
+Contingency tables are commonly used to summarize frequencies of two or more categorical variables. The are many situations where you can utilize a contingency table. For example, 
+
+  * When performing a (prospective) __randomized clinical trial__ with two treatment arms for curing a disease, we may collect the following data. Please note that in this example, the total number in each row can be pre-defined by the researcher. 
+  
+$\quad$       | Cured | No Cured | Total
+-----: | :----: | :----: | :----:
+Treatment | 830 | 170 | 1000
+Control | 640  | 360 | 1000
+Total | 1470 | 530 | 2000
+
+  * In a (retrospective) __case control study__ for detecting cancer-associated genetic markers, we may collect the following data. Note that in this case, the total number in each column is pre-defined by the researcher. 
+  
+$\quad$       | Have Cancer | No Cancer | Total
+-----: | :----: | :----: | :----:
+Genotype AA | 690 | 436 | 1126
+Genotype Aa/aa | 310  | 564 | 874
+Total | 1000 | 1000 | 2000  
+  
+  * When evaluating a medical test of Trisomy in an __observational study__, the following table is observed. From this table, we can calculate the sensitivity, specificity, etc., which can be used to evaluate this medical test.
+    
+$\quad$       | Trisomy | No Trisomy | Total
+-----: | :----: | :----: | :----:
+Test Positive   | 15 | 68 | 83
+Test Negative  | 12  | 879 | 891
+Total | 27 | 947 | 974  
+
+In all of these examples, we may be interested in whether the condition (row) is associated with the outcome (column). However, be very careful that the design of these studies are different, which may not allow some quantities being calculated. In particular, we are interested in two quantities: the __Relative Risk__ and the __Odds Ratio__. 
+
+## Relative Risk
+
+The relative risk is defined as the ratio of the probability of an outcome in an exposed group to the probability of an outcome in an unexposed group. It is also called __Risk Ratio__. And often times, __RR__ is used. 
+
+$\quad$       | Event | No Event | Total
+-----: | :----: | :----: | :----:
+Exposed | A | B | A+B
+Unexposed | C  | D | C+D
+Total | A+C | B+D | A+B+C+D
+
+The RR can be calculated as 
+
+$$\frac{A / (A+B)}{C / (C+D)}$$
+If RR is significantly different from 1 (the risks from both groups are the same), then we can conclude that the group is a significant factor. It is very important to know that RR is only valid for a **prospective study**, meaning that the samples in the exposed and unexposed groups are defined first, then the event are observed later. This is reasonable because otherwise, $A / (A+B)$ cannot be interpreted as the probability of the event in a given group. 
+
+Let's use our previous artificial data as an example. The two risks are 830 / 1000 and 640 / 1000, making RR 1.296875. We will use the `R` package "epitools". Note that this is an example when you do not have the original data, but only the summary frequency table. Also, be very careful that when specifying the table using `matrix()` function, `R` requires the input column-wise. 
+
+```{r}
+  library(epitools)
+  
+  # we need to specify the data of the first column, then second column
+  freqtable = matrix(c(830, 640, 170, 360),nrow = 2, ncol = 2)
+  
+  # this is for naming the items properly (not a necessary step)
+  # the R function will automatically assign them some name if you leave them empty. 
+  rownames(freqtable) = c("Treatment", "Control")
+  colnames(freqtable) = c("Cured", "Not Cured")  
+  
+  freqtable
+  
+
+  
+  # use the risk ratio function
+  riskratio(freqtable)
+```
+
+To understand the results: 
+  
+  * `data` simply restate the data and the totals for rows and columns
+  * `measure` provides the risk ratio calculation. the `estimate` column is the estimated RR, with `lower` and `upper` as the 95% confidence interval. Note that the result __uses the first row as a reference group__. Hence, the the second row `Control` represent the RR of control vs. treatment. And we can see the estimated RR is 2.118 with a confidence interval (1.8046, 2.4849). Since this interval does not include, we know that the risks are significantly different. But we noticed that this is different from our own calculation 1.296875. This is because the function requires the __Event to be specified in the second column__ of the data. Based on the construction of `freqtable`, the risks (of uncured) are 360 / 1000 and 170 / 1000, making the risk ratio 2.118. 
+  * `p.value` provides significance from three different test statistics: `mid-p`, `fisher's exact` and `chi square`. In our case, since the sample size is very large, they should provide similar results. When the sample size is very small, `fisher's exact` should be used. 
+
+Now we re-organize the `freqtable` so that it is properly orientated to calculate the quantities we are interested in. Now this results is the calculating the RR of the event, and it is the RR of the treatment vs. control instead of the other way around. The __conclusion of significance will not be any different__ since it is essentially the same data. 
+
+```{r}  
+  # switch columns
+  freqtable = freqtable[, c(2,1)]
+  
+  # switch rows 
+  freqtable = freqtable[c(2,1),]
+  
+  riskratio(freqtable)
+```
+
+## Example: Vaccine Effect Size Calculation 
+
+A chickenpox outbreak started in an Oregon elementary school in October 2001. [Tugwell et al. (2021)](papers/Tugwell2004Chickenpox.pdf) investigated students who were at the risk of chickenpox prior the event and separated the subjects into vaccinated and unvaccinated groups. This study data were also used in the [CDC Principles of Epidemiology Guild](https://www.cdc.gov/csels/dsepd/ss1978/lesson3/section5.html). The following data were observed: 
+
+$\quad$       | Varicella | Non-case
+-----:        | :----:    | :----: 
+Vaccinated    | 18        | 134 
+Unvaccinated  | 3         | 4
+
+What is the effectiveness of the vaccine? Note that the definition of the __effect size of a vaccine is defined as 1 - RR__. Hence, let's focus on calculating the RR and its confidence interval and significance. We need to convert this to the `R` data:
+
+```{r}
+  # Please be careful about the table construction
+  Chickenpox = matrix(c(4, 134, 3, 18),nrow = 2, ncol = 2)
+  rownames(Chickenpox) = c("Unvaccinated", "Vaccinated")
+  colnames(Chickenpox) = c("Non-case", "Varicella")  
+
+  # use the risk ratio function
+  riskratio(Chickenpox)
+```
+
+Hence the estimated RR is 27.6%, with a 95% confidence interval of (10.6%, 72.1%). This is significantly different from 1, with p-value 0.049. Note that, we use the Fisher's exact test since the sample size is relatively small. The effect size of the vaccine is 1 - 27.6% = 72.4% with confidence interval (27.9%, 89.4%). 
+
+## Practice questions 
+
+  1. Another example was also presented at the [CDC website](https://www.cdc.gov/csels/dsepd/ss1978/Lesson3/Section5.html) regarding the incidence of Mycobacterium tuberculosis infection among congregated, HIV-Infected prison inmates in South Carolina, United States. We will use the data from the original article instead of the table on the CDC website. From Table 2 in [McLaughlin (2003)](papers/McLaughlin2003Extensive.pdf), a total of 233 subjects were included, and use the information regarding their side of dormitory:
+  
+$\quad$           | Infected  | Not Infected
+-----:            | :----:    | :----: 
+Right Dormitory   | 82        | 36
+Left Dormitory   | 22        | 93 
+
+From this table, replicate their results of RR (right against left) and confidence interval. 
+
+```{r class.source = NULL, eval = FALSE}
+  # Please be careful about the table construction
+  MT = matrix(c(93, 36, 22, 82),nrow = 2, ncol = 2)
+  rownames(MT) = c("Left", "Right")
+  colnames(MT) = c("Non-Infected", "Infected")
+
+  # use the risk ratio function
+  riskratio(MT)
+```
+
+  2. When we actually have the individual data, all we need to do is to summarize the data into the 2 by 2 table. This can be done using the `table()` function. Try the RR calculation using the following data. However, be careful about your interpretation of the result due to the table orientation. 
+  
+```{r}  
+  newdata = data.frame("Infected" = rbinom(100, 1, prob = 0.3), 
+                       "Vaccinated" = rbinom(100, 1, prob = 0.5))
+```
+
+```{r class.source = NULL, eval = FALSE}
+  datatable = table("Vaccinated"= newdata$Vaccinated, "Infected" = newdata$Infected)
+  riskratio(datatable)
+```  

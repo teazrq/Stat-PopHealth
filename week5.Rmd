@@ -29,15 +29,15 @@ output:
 
 ## TBL Overview
 
-You should **complete this reading material before** the TBL session on Wed, Aug 4. This week's TBL session focuses on calculating and interpreting some of the most popular quantities and models for disease frequencies. This includes odds ratio, relative risk and logistic regression. We will be using both simulated data and two recent papers: [Dagan et al. (2021)](notes/week5/papers/Dagan2021.pdf) and [O'Brien et al. (2020)](notes/week5/papers/OBrien2020.pdf).
+You should **complete this reading material before** the TBL session on Wed, Aug 4. This week's TBL session focuses on calculating and interpreting some of the most popular quantities and models for disease frequencies. This includes odds ratio, relative risk and logistic regression. We will be using both simulated data and two papers: [McLaughlin et al. (2003)](notes/week5/papers/McLaughlin2003Extensive.pdf) and [O'Brien et al. (2020)](notes/week5/papers/OBrien2020.pdf).
 
 To successfully complete the questions in this TBL session, you should focus on the following topics while reading this material:
 
-  * Use R to compute and interpret the odds ratio, relative risk and their confidence intervals
-  * Apply the relative risk calculation to the vaccine effect size study
+  * Use R to compute and interpret the relative risk, odds ratio and their confidence intervals
+  * Apply the relative risk calculation to the data collected in [McLaughlin et al. (2003)](notes/week5/papers/McLaughlin2003Extensive.pdf)
   * Use R to perform logistic regression
   * Read the output from R to evaluate the variables and the overall model fitting
-  * Interpreting the effects of variables in a logistic regression
+  * Interpreting the effects of variables in a logistic regression, using [O'Brien et al. (2020)](notes/week5/papers/OBrien2020.pdf)
   * Use logistic regressions for prediction
 
 There are also several questions about more advanced topics in linear regression:
@@ -46,8 +46,12 @@ There are also several questions about more advanced topics in linear regression
 
 ## Reading Material
 
-  * [Relative Risk and Odds Ratio]
+  * [[Relative Risk](docs/notes/week5/TBL-RR.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week5/TBL-RR.Rmd', text = 'Source File')`] 
+  * [Odds Ratio]
   * [Logistic Regression]
+
+
+
 
 ## Discussion Session
 
