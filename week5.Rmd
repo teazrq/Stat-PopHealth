@@ -46,7 +46,7 @@ There are also several questions about more advanced topics in linear regression
 
 ## Reading Material
 
-  * [[Relative Risk](docs/notes/week5/TBL-RR.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week5/TBL-RR.Rmd', text = 'Source File')`] 
+  * [[Relative Risk](notes/week5/TBL-RR.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week5/TBL-RR.Rmd', text = 'Source File')`] 
   * [Odds Ratio]
   * [Logistic Regression]
 
