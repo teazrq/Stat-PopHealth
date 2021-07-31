@@ -83,8 +83,6 @@ Let's use our previous artificial data as an example. The two risks are 830 / 10
   
   freqtable
   
-
-  
   # use the risk ratio function
   riskratio(freqtable)
 ```
