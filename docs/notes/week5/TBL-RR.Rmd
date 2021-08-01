@@ -128,7 +128,7 @@ What is the effectiveness of the vaccine? Note that the definition of the __effe
 
 Hence the estimated RR is 27.6%, with a 95% confidence interval of (10.6%, 72.1%). This is significantly different from 1, with p-value 0.049. Note that, we use the Fisher's exact test since the sample size is relatively small. The effect size of the vaccine is 1 - 27.6% = 72.4% with confidence interval (27.9%, 89.4%). 
 
-## Practice questions 
+## Practice Questions 
 
   1. Another example was also presented at the [CDC website](https://www.cdc.gov/csels/dsepd/ss1978/Lesson3/Section5.html) regarding the incidence of Mycobacterium tuberculosis infection among congregated, HIV-Infected prison inmates in South Carolina, United States. We will use the data from the original article instead of the table on the CDC website. From Table 2 in [McLaughlin (2003)](papers/McLaughlin2003Extensive.pdf), a total of 233 subjects were included, and use the information regarding their side of dormitory:
   
