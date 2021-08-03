@@ -29,7 +29,7 @@ output:
 
 ## TBL Overview
 
-You should **complete this reading material before** the TBL session on Wed, Aug 4. This week's TBL session focuses on calculating and interpreting some of the most popular quantities and models for disease frequencies. This includes odds ratio, relative risk and logistic regression. We will be using both simulated data and two papers: [McLaughlin et al. (2003)](notes/week5/papers/McLaughlin2003Extensive.pdf) and [O'Brien et al. (2020)](notes/week5/papers/OBrien2020.pdf).
+You should **complete this reading material before** the TBL session on Wed, Aug 4. This week's TBL session focuses on calculating and interpreting some of the most popular quantities and models for disease frequencies. This includes odds ratio, relative risk and logistic regression. We will be using both simulated data and two papers: [McLaughlin et al. (2003)](notes/week5/papers/McLaughlin2003Extensive.pdf) and [O'Brien et al. (2020)](notes/week5/papers/OBrien2020Misplaced.pdf).
 
 To successfully complete the questions in this TBL session, you should focus on the following topics while reading this material:
 
@@ -37,7 +37,7 @@ To successfully complete the questions in this TBL session, you should focus on 
   * Apply the relative risk calculation to the data collected in [McLaughlin et al. (2003)](notes/week5/papers/McLaughlin2003Extensive.pdf)
   * Use R to perform logistic regression
   * Read the output from R to evaluate the variables and the overall model fitting
-  * Interpreting the effects of variables in a logistic regression, using [O'Brien et al. (2020)](notes/week5/papers/OBrien2020.pdf)
+  * Interpreting the effects of variables in a logistic regression, using [O'Brien et al. (2020)](notes/week5/papers/OBrien2020Misplaced.pdf)
   * Use logistic regressions for prediction
 
 There are also several questions about more advanced topics in linear regression:
