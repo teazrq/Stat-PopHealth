@@ -54,4 +54,4 @@ There are also several questions about more advanced topics in linear regression
   
 ## Discussion Session
 
-  * [Model Evaluations]
+  * [[Model Evaluations](notes/week5/TBL-ModelEvaluation.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week5/TBL-ModelEvaluation.Rmd', text = 'Source File')`] 
