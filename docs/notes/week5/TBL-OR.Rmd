@@ -101,14 +101,15 @@ Unvaccinated  | 3         | 4
 
   1. Among all mentioned studies (randomized trial, case-control and observational), which is valid for Relative Risk and which is valid for Odds Ratio?
   
-  2. From Table 2 in [McLaughlin (2003)](papers/McLaughlin2003Extensive.pdf), we can also calculate the OR. Based on this information, can you directly calculate the OR of Left vs. Right (instead of Right vs. Left) and it confidence intervel?
+  2. From Table 2 in [McLaughlin (2003)](papers/McLaughlin2003Extensive.pdf), we can also calculate the OR. Based on this information, can you directly calculate the OR of Left vs. Right (instead of Right vs. Left) and it confidence interval?
   
 ```{r}
   # Please be careful about the table construction
-  MT = matrix(c(93, 36, 22, 82),nrow = 2, ncol = 2)
+  MT = matrix(c(36, 93, 82, 22),nrow = 2, ncol = 2)
   rownames(MT) = c("Left", "Right")
   colnames(MT) = c("Non-Infected", "Infected")
-
+  MT
+  
   # use the risk ratio function
-  riskratio(MT)$measure
+  oddsratio(MT)$measure
 ```

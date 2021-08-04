@@ -50,7 +50,8 @@ There are also several questions about more advanced topics in linear regression
   * [[Odds Ratio](notes/week5/TBL-OR.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week5/TBL-OR.Rmd', text = 'Source File')`] 
   * [[Logistic Regression](notes/week5/TBL-Logistic.html)] [`.Rmd` `r xfun::embed_file('docs/notes/week5/TBL-Logistic.Rmd', text = 'Source File')`]
   * [Cleveland Heart Disease Data](notes/week5/processed_cleveland.csv)
-
+  * [Sepsis Data](notes/week5/Sepsis.csv)
+  
 ## Discussion Session
 
   * [Model Evaluations]
