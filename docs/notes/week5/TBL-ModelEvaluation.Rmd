@@ -1,0 +1,83 @@
+---
+title: "TBL (Week 4) Discussion"
+author: "Ruoqing Zhu"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+  options(width = 1000)
+  knitr::opts_chunk$set(fig.width=9, fig.height=6, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(class.source = "fold-show")
+  knitr::opts_chunk$set(collapse=FALSE)
+```
+```{css, echo=FALSE}
+.questioncode {
+background-color: #CCDDFF;
+}
+```
+
+## Discussion: Evaluation of Classification Models
+
+When we use a logistic regression, how do we know if the model fits well or not? In a linear regression, the R-square can be used, which means how much variance is explained by the model. However, there is no criteria in a logistic regression that can be interpreted in the same way. However, we can always look at the accuracy of our model fitting. 
+
+The first question we have to ask is, if we have a new subject, how to predict if the outcome is 0 or 1? Our first instinct would be: if the predicted probability is larger than 0.5, then we should predict this subject to 1, and 0 otherwise. Then we can look at the entire training dataset to see how many of them are predicted correctly. 
+
+```{r}
+  heart = read.csv("processed_cleveland.csv")
+  heart$Y = as.factor(heart$num > 0)
+  logistic.fit <- glm(Y~age + sex + chol + trestbps + cp , data = heart, family = binomial)
+  summary(logistic.fit)
+  
+  # this line of code will predict the training data itself, without providing additional data
+  pred = predict(logistic.fit, type = "response")
+  table("Predicted" = (pred > 0.5), "Outcome" = heart$Y)
+```
+We can see that there are 128 + 107 = 235 subjects who predicted correctly out of 303 subjects. Hence the accuracy is 235 / 303 = 77.56%.
+
+However, this does not always mean that the model is good. We have to always check what is the "baseline" accuracy, which is the marginal frequency of the outcome: 164 / 303 = 54.13%. Now, consider a situation where the outcome is a very rare disease, say only happen 10% of the time. Then if we predict all subjects to 0, then the accuracy would already be 90%. Can we have a criteria that is more robust in that case? 
+
+## Sensitivity, Specificity and the ROC Curve
+
+$\quad$       | True 0 | True 1 
+-----: | :----: | :----: 
+Predict 1 | False Positive (FP) | True Positive (TP)
+Predict 0 | True Negative (TN) | False Negative (FN)
+
+  * __Sensitivity__ (also called “Recall”) is the defined as the true positive rate (among the True 1 population, what proportion are correctly identified by the model）
+  $$\text{Sensitivity} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
+  * __Specificity__ is the defined as the true negative rate (among the True 1 population, what proportion are correctly identified by the model)
+  $$\text{Specificity} = \frac{\text{TN}}{\text{TN} + \text{FP}}$$
+
+Now, if we use 0.5 as the cut off to predict a new subject, we can calculate the corresponding sensitivity and specificity. However, its not necessary that we need to use 0.5 (think about the case when 90% of the samples are 0). If we alter this cut off value, we can get different sensitivity and specificity values for each choice of the cut off value. Then we can plot `1 - specificity` (false positive rate) versus the `sensitivity` (true positive rate). This is called the ROC curve, and it can be calculated automatically. The closer this curve to the top-left, the better performance this model is. A common measure is the area under the ROC curve. 
+
+```{r}
+  library(ROCR)
+  roc <- prediction(pred, heart$Y)
+  
+  # calculates the ROC curve
+  perf <- performance(roc,"tpr","fpr")
+  plot(perf,colorize=TRUE)
+  
+  # this computes the area under the curve
+  performance(roc, measure = "auc")@y.values[[1]]
+```
+
+
+
+
+
+
+
+
