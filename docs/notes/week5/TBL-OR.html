@@ -444,19 +444,19 @@ div.tocify {
 </ol>
 <pre class="r fold-show"><code>  # Please be careful about the table construction
   MT = matrix(c(36, 93, 82, 22),nrow = 2, ncol = 2)
-  rownames(MT) = c(&quot;Left&quot;, &quot;Right&quot;)
+  rownames(MT) = c(&quot;Right&quot;, &quot;Left&quot;)
   colnames(MT) = c(&quot;Non-Infected&quot;, &quot;Infected&quot;)
   MT
 ##       Non-Infected Infected
-## Left            36       82
-## Right           93       22
+## Right           36       82
+## Left            93       22
   
   # use the risk ratio function
   oddsratio(MT)$measure
 ##                         NA
 ## odds ratio with 95% C.I.  estimate     lower     upper
-##                    Left  1.0000000        NA        NA
-##                    Right 0.1055596 0.0562827 0.1911488</code></pre>
+##                    Right 1.0000000        NA        NA
+##                    Left  0.1055596 0.0562827 0.1911488</code></pre>
 </div>
 
 
