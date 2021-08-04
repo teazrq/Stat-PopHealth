@@ -2852,7 +2852,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">TBL (Week 5) Questions</h1>
 <h4 class="author">Ruoqing Zhu</h4>
-<h4 class="date">Last Updated: August 02, 2021</h4>
+<h4 class="date">Last Updated: August 03, 2021</h4>
 
 </div>
 
@@ -2864,6 +2864,174 @@ background-color: #CCDDFF;
 </style>
 <div id="questions-1" class="section level2">
 <h2>Questions 1</h2>
+<p>Use the following code to load a sepsis dataset from the <code>aVirtualTwins</code> package. You may need to install this package prior to loading. This is a dataset with 470 patients and 13 variables.</p>
+<pre class="r fold-show"><code>  library(aVirtualTwins)
+  data(sepsis)</code></pre>
+<p>The outcome is survival after 28 days of treatment, a value of 1 for subjects who died by 28 days and 0 otherwise. The Therapy variable is an indicator of a newly developed treatment (with value 1) versus the control (value 0). The following code can be used to summarize the observed data into a contingency table.</p>
+<pre class="r fold-show"><code>  table(&quot;Therapy&quot;= sepsis$THERAPY, &quot;Survival&quot; = sepsis$survival)</code></pre>
+<pre><code>##        Survival
+## Therapy   0   1
+##       0 101  52
+##       1 188 129</code></pre>
+<p>Assuming that this is a randomized trial, what is the relative risk of death associated with using the new therapy, compared with the control?</p>
+<pre><code>[A]. 1.197343
+B. 0.835182
+C. 0.898397
+D. 1.113093</code></pre>
+<pre class="r fold-show"><code>  library(epitools)
+  freqtable = table(&quot;Therapy&quot;= sepsis$THERAPY, &quot;Survival&quot; = sepsis$survival)
+  riskratio(freqtable)</code></pre>
+<pre><code>## $data
+##        Survival
+## Therapy   0   1 Total
+##   0     101  52   153
+##   1     188 129   317
+##   Total 289 181   470
+## 
+## $measure
+##        risk ratio with 95% C.I.
+## Therapy estimate     lower    upper
+##       0 1.000000        NA       NA
+##       1 1.197343 0.9253068 1.549356
+## 
+## $p.value
+##        two-sided
+## Therapy midp.exact fisher.exact chi.square
+##       0         NA           NA         NA
+##       1  0.1627227    0.1885107  0.1614734
+## 
+## $correction
+## [1] FALSE
+## 
+## attr(,&quot;method&quot;)
+## [1] &quot;Unconditional MLE &amp; normal approximation (Wald) CI&quot;</code></pre>
+<pre class="r"><code>  # wrong answers
+  riskratio(freqtable[c(2,1), ])$measure
+  riskratio(freqtable[, c(2,1)])$measure
+  riskratio(freqtable[c(2,1), c(2,1)])$measure</code></pre>
+</div>
+<div id="questions-2" class="section level2">
+<h2>Questions 2</h2>
+<p>Based on the result from the previous question, the new treatment is</p>
+<pre><code>A. Significantly better than control 
+B. Significantly worse than control
+[C]. not siginificantly different from control </code></pre>
+</div>
+<div id="questions-3" class="section level2">
+<h2>Questions 3</h2>
+<p>Now, we will use the McLaughlin et al. (2003) Table 2 to perform the analysis. You need to setup the contingency table yourself based on the information provided in the paper and answer the next several questions. Consider the CD4 cell count <span class="math inline">\(\geq\)</span> 200 as the indication of exposure and use infection as the outcome of interest. What is the 95% confidence interval of the odds ratio corresponding to this exposure?</p>
+<pre class="r fold-show"><code>  freqtable = matrix(c(11, 118, 15, 89),nrow = 2, ncol = 2)
+  oddsratio(freqtable)</code></pre>
+<pre><code>## $data
+##           Outcome
+## Predictor  Disease1 Disease2 Total
+##   Exposed1       11       15    26
+##   Exposed2      118       89   207
+##   Total         129      104   233
+## 
+## $measure
+##           odds ratio with 95% C.I.
+## Predictor   estimate     lower    upper
+##   Exposed1 1.0000000        NA       NA
+##   Exposed2 0.5564568 0.2362064 1.272439
+## 
+## $p.value
+##           two-sided
+## Predictor  midp.exact fisher.exact chi.square
+##   Exposed1         NA           NA         NA
+##   Exposed2  0.1649199     0.208853  0.1553386
+## 
+## $correction
+## [1] FALSE
+## 
+## attr(,&quot;method&quot;)
+## [1] &quot;median-unbiased estimate &amp; mid-p exact CI&quot;</code></pre>
+<pre><code>[A]. 0.2362064, 1.272439
+B. 0.7858923, 4.233585</code></pre>
+<pre class="r fold-show"><code>  oddsratio(freqtable[c(2,1), ])$measure</code></pre>
+<pre><code>##           odds ratio with 95% C.I.
+## Predictor  estimate     lower    upper
+##   Exposed1 1.000000        NA       NA
+##   Exposed2 1.797011 0.7858923 4.233585</code></pre>
+</div>
+<div id="question-4" class="section level2">
+<h2>Question 4</h2>
+<p>If we switch the explore to CD4 cell count <span class="math inline">\(&lt;\)</span> 200 and also switch the outcome of interest to not infected. Then the odds ratio would be</p>
+<pre><code>A. The reciprocal of the previous one
+[B]. Unchanged
+C. Increase because CD4 cell can trigger immune cells to protect against infection 
+D. None of the others</code></pre>
+</div>
+<div id="question-5" class="section level2">
+<h2>Question 5</h2>
+<p>Following the results from Question 3, high CD4 cell count can</p>
+<pre><code>A. Significantly reduce the risk of infection  
+B. Significantly increase the risk of infection
+[C]. not significantly  different from low CD4 cell count </code></pre>
+</div>
+<div id="question-6" class="section level2">
+<h2>Question 6</h2>
+<p>Which of the following study design is suitable for calculating the relative risk, but not suitable for odds ratio?</p>
+<pre><code>A. A randomized clinical trial
+B. Case-control study of cancer-associated genetic marker
+C. Observational study of the accuracy of a COVID19 test kit
+[D]. None of the others</code></pre>
+</div>
+<div id="question-7" class="section level2">
+<h2>Question 7</h2>
+<p>Using the sepsis data again, fit a logistic regression to predict the probability of death (survival = 1) using THERAPY as a binary predictor and AGE as a continuous predictor.</p>
+<pre class="r fold-show"><code>  logistic.fit &lt;- glm(survival~THERAPY + AGE, data = sepsis, family = binomial)
+  summary(logistic.fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = survival ~ THERAPY + AGE, family = binomial, data = sepsis)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.6088  -0.9403  -0.6818   1.1851   1.9833  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -3.206481   0.439387  -7.298 2.93e-13 ***
+## THERAPY      0.268146   0.215960   1.242    0.214    
+## AGE          0.041914   0.006476   6.472 9.68e-11 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 626.52  on 469  degrees of freedom
+## Residual deviance: 577.58  on 467  degrees of freedom
+## AIC: 583.58
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>Regardless of significance or not, if a patient is 50 years old and is using the new therapy, what is the probability of death?</p>
+<pre><code>A. -0.842635
+B. 0.4305745
+C. 0.0523307
+[D]. 0.3009837</code></pre>
+<pre class="r fold-show"><code>  -3.206481 + 0.268146 + 50*0.041914</code></pre>
+<pre><code>## [1] -0.842635</code></pre>
+<pre class="r fold-show"><code>  testdata = data.frame(&quot;THERAPY&quot; = 1, AGE = 50)
+  predict(logistic.fit, newdata = testdata, type = &quot;response&quot;)</code></pre>
+<pre><code>##         1 
+## 0.3009837</code></pre>
+</div>
+<div id="question-8" class="section level2">
+<h2>Question 8</h2>
+<p>Based on the parameter estimate, each unit increase of Age would</p>
+<pre><code>A. Increase the predicted probability of death by 0.041914
+B. Increase log of the predicted probability of death by 0.041914
+C. Increase the odds ratio of death by 0.041914
+[D]. Increase log of the odds ratio of death by 0.041914</code></pre>
+</div>
+<div id="question-9" class="section level2">
+<h2>Question 9</h2>
+<p>Using experiment 1 in Table 1 of O’Brien (2021), there are five parameter estimates based on the reduced model (the right four columns). Column B is the estimated parameter. The model involves an interaction term between Scientific Content and Trust. Consider a new sample, with scientific content = 1. If we increase trust by one unit, then</p>
+<pre><code>A. The log odds ratio of disseminating the information would decrease by 0.5
+[B]. The log odds ratio of disseminating the information would decrease by 0.02
+C. The probability of disseminating the information would decrease by 0.5
+D. The probability of disseminating the information would decrease by 0.02</code></pre>
 </div>
 
 
