@@ -25,4 +25,11 @@ output:
   
 ## Lecture Note
 
-## R Examples
+  + [[Survival Analysis](notes/week6/SurvivalAnalysis.html){target='_blank'}]
+  + The original `.Rmd` [`r xfun::embed_file('docs/notes/week6/SurvivalAnalysis.Rmd', text = 'Source File')`] used to generate the lecture note
+
+## Homework
+
+  + Reading: Finish Sections 8.1 and 8.2 from the [BPS textbook](info.html)
+  + Finish the practice questions in the lecture note
+  
