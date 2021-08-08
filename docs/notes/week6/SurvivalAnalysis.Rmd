@@ -129,7 +129,7 @@ where $f(t)$ is the density function. The relationship of the three could be vis
 
 ## Practice Questions
 
-Read the (alinas-Escudero et al. 2020)[papers/SalinasEscudero2020Survival.pdf] paper, Figure 1. For different age groups, what are their chance to survival at 20 days? For patients who entered ICU, what is the median survival time (the time where half of the population fail)? 
+Read the [Salinas-Escudero et al. 2020](papers/SalinasEscudero2020Survival.pdf) paper, Figure 1. For different age groups, what are their chance to survival at 20 days? For patients who entered ICU, what is the median survival time (the time where half of the population fail)? 
 
 ## Comparing Two Survial Functions
 
