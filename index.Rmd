@@ -14,17 +14,14 @@ output:
       in_header: "favicon.html"
 ---
 
-## Welcome, Class of 2025!
+## Welcome, Class of 2026!
 
-This website provides lectures and R examples for the Statistical components in the __*Foundations: Molecules to Populations*__ course at the Carle Illinois College of Medicine. The lectures are given at each Wednesday morning. 
+This website provides lectures notes and R examples for the Statistical components in the __*Foundations: Molecules to Populations*__ course at the Carle Illinois College of Medicine. The lectures are given on Wednesday mornings during the first three weeks. 
 
 ## Weekly Schedule
 
-  * __Week 1 (July 7)__: [History and Scope of Statistics](week1.html)
-  * __Week 2 (July 14)__: [R Intro and Basic Statistics](week2.html)
-  * __Week 3 (July 21)__: [Testing Mean Differences and Associations](week3.html)
-  * __Week 4 (July 28)__: [TBL - Correlation and Linear Regression](week4.html)
-  * __Week 5 (Aug 4)__: [TBL - Classification and Logistic Regression](week5.html)
-  * __Week 6 (Aug 11)__: [Survival Analysis and Beyond](week6.html)
+  * __Week 1 (July 6)__: [R Introduction and Statistical Principles](week1.html)
+  * __Week 2 (July 13)__: [Testing Mean Differences and Associations](week2.html)
+  * __Week 3 (July 20)__: [Statistical Models for Multivariate Analysis](week3.html)
   
 ## Announcements

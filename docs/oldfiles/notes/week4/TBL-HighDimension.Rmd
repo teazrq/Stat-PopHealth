@@ -1,0 +1,61 @@
+---
+title: "TBL (Week 4) Discussion"
+author: "Ruoqing Zhu"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+  options(width = 1000)
+  knitr::opts_chunk$set(fig.width=9, fig.height=6, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(class.source = "fold-show")
+  knitr::opts_chunk$set(collapse=FALSE)
+```
+```{css, echo=FALSE}
+.questioncode {
+background-color: #CCDDFF;
+}
+```
+
+## Discussion: High-dimensional Issues
+
+In data science practice, high-dimensionality is a commonly encountered problem. 
+
+```{r}
+  set.seed(2)
+  n = 30
+  p = 20
+  x = matrix(rnorm(n*p), n, p)
+  y = 0.5 * x[, 1] + rnorm(n)
+  fakedata = data.frame(y, x)
+  summary(lm(y ~ X1, data = fakedata))
+  summary(lm(y ~ ., data = fakedata))
+```
+```{r}
+  library(MASS)
+
+  #’backward’ and ‘forward’ can be used instead of ‘both’ to build the model
+
+  step <- stepAIC(lm(y ~ ., data = fakedata[, 1:6]), direction="both")
+```
+
+Some machine learning models can be used to solve this issue. For example, in linear regression, Lasso and Ridge regressions are commonly used. 
+
+```{r}
+  set.seed(2)
+  library(glmnet)
+  lasso.fit = cv.glmnet(x, y)
+  plot(lasso.fit)
+  coef(lasso.fit, s = "lambda.1se")
+```

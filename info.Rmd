@@ -16,9 +16,13 @@ output:
 ## Textbook
 
   + [**BPS**] Bruce, N., Pope, D., & Stanistreet, D. (2018). _Quantitative methods for health research: a practical interactive guide to epidemiology and statistics_. John Wiley & Sons.
-  + You can download the online version of this textbook [[here](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Quantitative+methods+for+health+research%3A+a+practical+interactive+guide+to+epidemiology+and+statistics&btnG=)]
+  + You can download the online version (within UIUC campus network or VPN) of this textbook [[here](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Quantitative+methods+for+health+research%3A+a+practical+interactive+guide+to+epidemiology+and+statistics&btnG=)]
   
-## R Help
+## R for Machine Learning Models
 
-  + [**SMLR**] I am also preparing a textbook for [[Statistical Learning and Machine Learning with R](https://teazrq.github.io/SMLR/)]
-  + We will use some of these material for R introduction
+  + I am also maintaining a textbook for [[Statistical Learning and Machine Learning with R](https://teazrq.github.io/SMLR/)]
+  + You can find some [R tutorial](https://teazrq.github.io/SMLR/r-and-rstudio.html) in this book
+  + If you are also interested in trying some machine learning models and understand how they work, these chapters could be useful:
+      + Penalized Learning Regressions: [Ridge](https://teazrq.github.io/SMLR/ridge-regression.html) and [Lasso](https://teazrq.github.io/SMLR/lasso.html)
+      + [Random Forests](https://teazrq.github.io/SMLR/random-forests.html)
+      + [Support Vector Machines](https://teazrq.github.io/SMLR/support-vector-machines.html)

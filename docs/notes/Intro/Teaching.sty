@@ -1,0 +1,152 @@
+
+\definecolor{UIUCblue1}{HTML}{002058}
+\definecolor{UIUCorange1}{HTML}{E87722}
+\definecolor{UIUCblue2}{HTML}{606EB2}
+\definecolor{UIUCorange2}{HTML}{D45D00}
+
+\definecolor{deepskyblue}{HTML}{00BFFF}
+\definecolor{darkorange}{HTML}{FF8C00}
+
+\colorlet{myblue}{UIUCblue2}
+\colorlet{myorange}{UIUCorange1}
+\definecolor{myred}{rgb}{0.75, 0, 0.3}
+
+\newcommand{\alertr}[1]{\textcolor{red}{#1}}
+\newcommand{\alertb}[1]{\textcolor{blue}{#1}}
+
+\newcommand{\Rref}[1]{\,\textcolor{UIUCblue2}{\textup{\textrm{#1}}}\,}
+
+
+%\setbeamercolor{alerted text}{fg=myred}
+\hypersetup{colorlinks, linkcolor=, urlcolor=myblue}
+
+\usepackage{listings}
+\usepackage{textcomp} % for the better looking tilde character (\texttildelow)
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+
+\lstset{ %
+  language=R,                     % the language of the code
+  basicstyle=\scriptsize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},      % keyword style
+  commentstyle=\color{dkgreen},   % comment style
+  stringstyle=\color{mauve},      % string literal style
+  %escapeinside={\%*}{*)},        % if you want to add a comment within your code
+  morekeywords={*,gam, ...},      % if you want to add more keywords to the set
+  deletekeywords={new,...},
+  moredelim=**[is][\color{myorange}]{@}{@},
+  literate={~} {\texttildelow}{1}
+}
+
+\newcommand{\One}[1]{\bm{1}\{#1\}}
+
+\newcommand{\R}[0]{{\mathbb{R}}}
+\newcommand{\mE}[0]{{\mathbb{E}}}
+
+\newcommand{\cD}[0]{{\cal D}}
+\newcommand{\cF}[0]{{\cal F}}
+\newcommand{\cR}[0]{{\cal R}}
+\newcommand{\cX}[0]{{\cal X}}
+\newcommand{\cI}[0]{{\cal I}}
+\newcommand{\cL}[0]{{\cal L}}
+\newcommand{\cN}[0]{{\cal N}}
+\newcommand{\cO}[0]{{\cal O}}
+\newcommand{\cS}[0]{{\cal S}}
+\newcommand{\cT}[0]{{\cal T}}
+
+\newcommand{\bB}[0]{\mathbf B}
+\newcommand{\bD}[0]{\mathbf D}
+\newcommand{\bF}[0]{\mathbf F}
+\newcommand{\bH}[0]{\mathbf H}
+\newcommand{\bI}[0]{\mathbf I}
+\newcommand{\bK}[0]{\mathbf K}
+\newcommand{\bL}[0]{\mathbf L}
+\newcommand{\bM}[0]{\mathbf M}
+\newcommand{\bP}[0]{\mathbf P}
+\newcommand{\bQ}[0]{\mathbf Q}
+\newcommand{\bR}[0]{\mathbf R}
+\newcommand{\bS}[0]{\mathbf S}
+\newcommand{\bU}[0]{\mathbf U}
+\newcommand{\bV}[0]{\mathbf V}
+\newcommand{\bW}[0]{\mathbf W}
+\newcommand{\bX}[0]{\mathbf X}
+\newcommand{\bY}[0]{\mathbf Y}
+\newcommand{\bZ}[0]{\mathbf Z}
+
+\newcommand{\bp}[0]{{\mathbf p}}
+\newcommand{\br}[0]{{\mathbf r}}
+\newcommand{\bg}[0]{{\mathbf g}}
+\newcommand{\bu}[0]{{\mathbf u}}
+\newcommand{\bv}[0]{{\mathbf v}}
+\newcommand{\bw}[0]{{\mathbf w}}
+\newcommand{\bx}[0]{{\mathbf x}}
+\newcommand{\by}[0]{{\mathbf y}}
+\newcommand{\bz}[0]{{\mathbf z}}
+
+\def\bal#1\eal{\begin{align} #1 \nonumber \end{align}}
+\def\!{\nonumber \\}
+
+\newcommand{\E}[0]{\text{E}}
+\newcommand{\Var}[0]{\text{Var}}
+\newcommand{\Bias}[0]{\text{Bias}}
+\newcommand{\Cov}[0]{\text{Cov}}
+\newcommand{\Err}[0]{\text{Err}}
+\newcommand{\Prob}[0]{\text{P}}
+\newcommand{\prob}[0]{\mathbf{p}}
+\newcommand{\Risk}[0]{\text{R}}
+\newcommand{\Trace}[0]{\text{Trace}}
+\newcommand{\df}[0]{\text{df}}
+
+\newcommand{\T}[0]{\text{T}}
+
+\newcommand{\bbeta}[0]{{\boldsymbol\beta}}
+\newcommand{\btheta}[0]{{\boldsymbol\theta}}
+\newcommand{\bmu}[0]{{\boldsymbol\mu}}
+\newcommand{\bxi}[0]{{\boldsymbol\xi}}
+\newcommand{\balpha}[0]{{\boldsymbol\alpha}}
+\newcommand{\bepsilon}[0]{{\boldsymbol\epsilon}}
+\newcommand{\bSigma}[0]{{\boldsymbol\Sigma}}
+\newcommand{\bTheta}[0]{{\boldsymbol\Theta}}
+\newcommand{\bLambda}[0]{{\boldsymbol\Lambda}}
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{cond}{Condition}[section]
+\newtheorem{conj}{Conjecture}[section]
+\newtheorem{exmp}{Example}[section]
+
+\theoremstyle{remark}
+\newtheorem{rmk}{Remark}
+\newtheorem{case}{Case}
+
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+\newcommand\cardheart{{\red\varheart}}
+\newcommand\carddiamond{{\red\vardiamond}}

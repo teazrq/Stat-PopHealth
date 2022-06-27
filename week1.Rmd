@@ -1,5 +1,5 @@
 ---
-title: "Week 1: History and Scope of Statistics"
+title: "Week 1: R Introduction and Statistical Principles"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
@@ -15,27 +15,38 @@ output:
 
 ## Weekly Objectives
 
-  * Randomness and probability
-  * Philosophy of Statistical hypothesis test
-  * Experiment  
-  * Null and alternative hypotheses
-  * Interpreting p-values
-  * Type I and Type II errors
-  * Statistical power
-  * Limitations of statistics
-  
-## Lecture Note
+  * Understand basic probability concepts such as random variables and distribution functions
+  * Understand the fundamental mechanism of statistical hypothesis tests
+  * Be able to define or identify null and alternative hypotheses, type I and type II errors
+  * Be able to interpret p-value and statistical power
+  * Understand the limitations of statistics
+  * Install R, R Studio and R packages and be familiar with their basics
+  * Perform statistical calculations in R
+  * Understand the goal of the final project
+  * Get familiar with NHANES data and know how to process the data in R
 
-  + [[Intro to Statistics](notes/week1/Intro to Stat.pdf){target='_blank'}]
-  
-## R Examples
+## Lecture Note and R Examples
 
-  + None
-  
-## Homework
+  + Lecture Note: [[Intro to Statistics](notes/intro/Intro to Stat.pdf){target='_blank'}]
+  + Follow [this guide](rcode/week1/R-Intro.html){target='_blank'} to install R and RStudio __before class__
+  + Download [`r xfun::embed_file('docs/rcode/week1/practice.Rmd', text = 'this .rmd file')`] for in-class practice
+  + Download the [birthrate data](data/birthrate.csv){target='_blank'}(.csv data file) and save it into the same folder as your `.rmd` file
 
-  + Reading: Sections 11.3.3 and 11.3.4 of the [BPS textbook](info.html)
-  + Install R and RStudio before Week 2 lecture
-      + If you have trouble installing R or RStudio, [this video](https://www.youtube.com/watch?v=cX532N_XLIs) can be helpful
-      + You can find some basic R information in [[Chaper 1](https://teazrq.github.io/SMLR/r-rstudio-and-r-markdown.html)] of my [SMLR](info.html) textbook.
-      + We will go over some basics during the Week 2 lecture
+## NHANCE Data Example
+
+You need to use some public available dataset to support the final project analysis. [NHANCE data](https://wwwn.cdc.gov/nchs/nhanes/){target='_blank'} is a rich nation-wide questionnaire data provided by the CDC. If you choose to use the NHANCE data, some data processing need to be done. Here is a toy example for downloading and processing the [2015-2016 data](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2015). For your own analysis, you may want to consider the more recent [NHANES 2017-March 2020 Pre-pandemic Version](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017){target='_blank'}. Additional source and data files to run this example file:
+
+  * [Toy example](rcode/NHANCE/NHANCE_Example.html){target='_blank'}
+  * `.Rmd` [`r xfun::embed_file('docs/rcode/NHANCE/NHANCE_Example.rmd', text = 'Source File')`]
+  * Data Files (from NHANES 2015-2016)
+      + Demographic data: [DEMO_I.XPT](https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DEMO_I.XPT)
+      + Diabetes data: [DIQ_I.XPT](https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DIQ_I.XPT)
+      + Examination data: [BMX_I.XPT](https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/BMX_I.XPT)
+
+## Further Reading
+
+  + Sections 11.1, 11.3.3 and 11.3.4 of the [BPS textbook](info.html)
+
+
+
+

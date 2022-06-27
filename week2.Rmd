@@ -1,5 +1,5 @@
 ---
-title: "Week 2: R Intro and Basic Statistics"
+title: "Week 2: Testing Mean Differences and Associations"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
@@ -15,14 +15,12 @@ output:
 
 ## Weekly Objectives
 
-  * Install R and R Studio
-  * Install R packages
-  * Load and save data using Excel
-  * Using and writing R functions
-  * Calculate summary statistics
-  * Generate random numbers and set random seed
-  
-## Lecture Note
+  * Learn and be able to calculate summary statistics such as mean, median, quantile, contingency table and correlation
+  * Use R to perform one-sample and two-sample tests, such as z-test and t-test
+  * Be able to read contingency tables and use statistical tests (fisher’s exact test and chi-square test) for associations
+  * Interpret p-values in various statistical tests
+
+## Lecture Note and R Examples
 
   + [[Introduction to R, RStudio and R Markdown](notes/week2/R-Intro.html){target='_blank'}]
   + The original `.Rmd` [`r xfun::embed_file('docs/notes/week2/R-Intro.Rmd', text = 'Source File')`] used to generate the lecture note

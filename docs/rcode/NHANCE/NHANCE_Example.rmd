@@ -1,0 +1,113 @@
+---
+title: "NHANES Data Analysis Example"
+author: "Ruoqing Zhu"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+  options(width = 1000)
+  knitr::opts_chunk$set(fig.width=9, fig.height=7, out.width = "60%", fig.align = 'center')
+  knitr::opts_chunk$set(collapse=TRUE)
+```
+
+## The NHANES Data
+
+I have already downloaded a bunch of `.XPT` files from the CDC NHANES dataset (see their links below) and saved them under the same folder as this `.rmd` file. The following code is an example for processing them, so they are ready to be analyzed. Please note that you will not be able to replicate this unless you download all the following `.XPT` files from [CDC NHANES website](https://wwwn.cdc.gov/nchs/nhanes/) and save them into the same folder as this `ReadNHANESData.Rmd` file. For demonstration purposes, I will create a toy dataset `NHANCE_2016_Toy.Rdata` to perform some calculations. If you plan to use the NHANCE data in your final project, you should consider reproducing this with additional variables (from more `.XPT` files) that you are interested in.
+
+## Readin SAS `.XPT` Data
+
+For example, I have the following setup in my folder: all the `.XPT` files, and the `.Rmd` file provided at our [course website](https://teazrq.github.io/Stat-PopHealth/week1.html). R and R Markdown tutorial can be found on the same page. The following code chuck is used to read-in data from `.XPT` files. Make sure that you install the `haven` package first, which provides the `read_xpt()` function
+
+```{r}
+  # this is a package used to read .XPT files
+  # if you don't have the package installed already, you should run 
+  # install.packages("haven") first
+
+  library(haven)
+```
+
+These following lines readin three datasets
+
+```{r}  
+  # Read-In HNANES 2015 - 2016 data 
+  # https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2015
+
+  # Demographics Data
+  Demographic <- read_xpt("DEMO_I.XPT")         
+    # https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DEMO_I.XPT
+  
+  # Questionnaire Data
+  Diabetes <- read_xpt("DIQ_I.XPT")             
+    # https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DIQ_I.XPT
+  
+  # Examination Data
+  BodyMeasure <- read_xpt("BMX_I.XPT")          
+    # https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/BMX_I.XPT
+
+  # You can download more data from the CDC website
+```
+
+## Processing the data
+
+Depends on your analysis goal, you should process (cleaning, formatting, subsetting, etc.) your data before any analysis. In this example, I merge all three datasets by their unique identifier `SEQN`. This uses a more complex function `Reduce`. If your analysis involves multiple files and complicated merging logic, then you should explore solutions online, or discuss that with me. 
+
+```{r}
+  # We consider a few variables 
+
+  Demographic_Sub = Demographic[, c("SEQN", "RIDAGEYR")]
+  Diabetes_Sub = Diabetes[, c("SEQN", "DIQ010")]
+  BodyMeasure_Sub = BodyMeasure[, c("SEQN", "BMXBMI")]
+  
+  # Merge all dataset by SEQN (the unique identifier)
+  # This is a rather complicated function
+  RawData = Reduce(function(x,y) merge(x = x, y = y, by = "SEQN", all.x = TRUE),
+                   list(Demographic_Sub, Diabetes_Sub, BodyMeasure_Sub))
+  
+  # the complete.cases() statement identifies rows without missing data
+  # we only keep the complete cases in this example
+  RawData = RawData[complete.cases(RawData), ]
+```
+
+For convenience, you should consider saving the processed data so that you do not need to go through the data processing again. 
+
+```{r, fig.height=5, fig.width=7, message=FALSE}
+  # Save data
+  save(RawData, file = "NHANCE_2016_Toy.Rdata")
+```
+
+## Using the data for analysis
+
+The following code will load and view the first several rows of the data you just saved
+
+```{r, fig.height=5, fig.width=7, message=FALSE}
+  # Save data
+  load("NHANCE_2016_Toy.Rdata")
+  head(RawData)
+```
+
+Now it is your choice to perform analysis using this data. For example, we can consider univariate analysis such as  
+
+```{r, fig.height=5, fig.width=7, message=FALSE}
+  # plot histogram of age 
+  hist(RawData$RIDAGEYR, xlab = "Age")
+
+  # Get the mean of age 
+  mean(RawData$RIDAGEYR)
+
+  # calculate the correlation between age and BMI
+  cor(RawData$BMXBMI, RawData$RIDAGEYR)
+
+  # You may consider fancier plots
+  # Plot calorie intake and BMI, colored by diabetes status
+  library(ggplot2)
+  ggplot(RawData, aes(RIDAGEYR, BMXBMI, colour = as.factor(DIQ010))) + 
+    geom_point()
+```

@@ -7,24 +7,15 @@ navbar:
     - text: "Lecture Notes"
       icon: fa-book
       menu:
-          - text: "Week 1: History and Scope of Statistics"
+          - text: "Week 1: R Introduction and Statistical Principles"
             icon: fa-bookmark
             href: week1.html
-          - text: "Week 2: R Intro and Basic Statistics"
+          - text: "Week 2: Testing Mean Differences and Associations"
             icon: fa-bookmark
             href: week2.html
-          - text: "Week 3: Testing Mean Differences and Associations"
+          - text: "Week 3: Statistical Models for Multivariate Analysis"
             icon: fa-bookmark
             href: week3.html
-          - text: "Week 4: TBL: Correlation and Linear Regression"
-            icon: fa-bookmark
-            href: week4.html
-          - text: "Week 5: TBL: Classification and Logistic Regression"
-            icon: fa-bookmark
-            href: week5.html
-          - text: "Week 6: Survival Analysis and Beyond"
-            icon: fa-bookmark
-            href: week6.html
     - text: "Additional Resources"
       icon: fa-info-circle
       href: info.html

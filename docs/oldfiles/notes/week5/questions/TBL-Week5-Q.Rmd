@@ -1,0 +1,160 @@
+---
+title: "TBL (Week 5) Questions"
+author: "Ruoqing Zhu"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+  options(width = 1000)
+  knitr::opts_chunk$set(fig.width=9, fig.height=6, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(class.source = "fold-show")
+  knitr::opts_chunk$set(collapse=FALSE)
+```
+```{css, echo=FALSE}
+.questioncode {
+background-color: #CCDDFF;
+}
+```
+
+## Questions 1
+
+Use the following code to load a sepsis dataset from the `aVirtualTwins` package. You may need to install this package prior to loading. This is a dataset with 470 patients and 13 variables. 
+
+```{r}
+  library(aVirtualTwins)
+  data(sepsis)
+```
+
+The outcome is survival after 28 days of treatment, a value of 1 for subjects who died by 28 days and 0
+otherwise. The Therapy variable is an indicator of a newly developed treatment (with value 1) versus the control (value 0). The following code can be used to summarize the observed data into a contingency table. 
+
+```{r}
+  table("Therapy"= sepsis$THERAPY, "Survival" = sepsis$survival)
+```
+
+Assuming that this is a randomized trial, what is the relative risk of death associated with using the new therapy, compared with the control? 
+
+    [A]. 1.197343
+    B. 0.835182
+    C. 0.898397
+    D. 1.113093
+
+```{r}
+  library(epitools)
+  freqtable = table("Therapy"= sepsis$THERAPY, "Survival" = sepsis$survival)
+  riskratio(freqtable)
+```
+```{r class.source = NULL, eval = FALSE}
+  # wrong answers
+  riskratio(freqtable[c(2,1), ])$measure
+  riskratio(freqtable[, c(2,1)])$measure
+  riskratio(freqtable[c(2,1), c(2,1)])$measure
+```
+
+## Questions 2
+
+Based on the result from the previous question, the new treatment is 
+
+    A. Significantly better than control 
+    B. Significantly worse than control
+    [C]. not siginificantly different from control 
+
+## Questions 3
+
+Now, we will use the McLaughlin et al. (2003) Table 2 to perform the analysis. You need to setup the contingency table yourself based on the information provided in the paper and answer the next several questions. Consider the CD4 cell count $\geq$ 200 as the indication of exposure and use infection as the outcome of interest. What is the 95% confidence interval of the odds ratio corresponding to this exposure?
+
+```{r}
+  freqtable = matrix(c(11, 118, 15, 89),nrow = 2, ncol = 2)
+  oddsratio(freqtable)
+```
+    [A]. 0.2362064, 1.272439
+    B. 0.7858923, 4.233585
+  
+```{r}
+  oddsratio(freqtable[c(2,1), ])$measure
+```
+
+## Question 4 
+
+If we switch the explore to CD4 cell count $<$ 200 and also switch the outcome of interest to not infected. Then the odds ratio would be
+
+    A. The reciprocal of the previous one
+    [B]. Unchanged
+    C. Increase because CD4 cell can trigger immune cells to protect against infection 
+    D. None of the others
+  
+## Question 5 
+
+Following the results from Question 3, high CD4 cell count can 
+
+    A. Significantly reduce the risk of infection  
+    B. Significantly increase the risk of infection
+    [C]. not significantly  different from low CD4 cell count 
+
+## Question 6
+
+Which of the following study design is suitable for calculating the relative risk, but not suitable for odds ratio?
+
+    A. A randomized clinical trial
+    B. Case-control study of cancer-associated genetic marker
+    C. Observational study of the accuracy of a COVID19 test kit
+    [D]. None of the others
+    
+## Question 7
+
+Using the sepsis data again, fit a logistic regression to predict the probability of death (survival = 1) using THERAPY as a binary predictor and AGE as a continuous predictor. 
+
+```{r}
+  logistic.fit <- glm(survival~THERAPY + AGE, data = sepsis, family = binomial)
+  summary(logistic.fit)
+```
+
+Regardless of significance or not, if a patient is 50 years old and is using the new therapy, what is the probability of death? 
+
+    A. -0.842635
+    B. 0.4305745
+    C. 0.0523307
+    [D]. 0.3009837
+
+```{r}
+  -3.206481 + 0.268146 + 50*0.041914
+  testdata = data.frame("THERAPY" = 1, AGE = 50)
+  predict(logistic.fit, newdata = testdata, type = "response")
+```
+
+## Question 8
+
+Based on the parameter estimate, each unit increase of Age would
+
+    A. Increase the predicted probability of death by 0.041914
+    B. Increase log of the predicted probability of death by 0.041914
+    C. Increase the odds ratio of death by 0.041914
+    [D]. Increase log of the odds ratio of death by 0.041914
+
+## Question 9
+
+Using experiment 1 in Table 1 of O’Brien (2021), there are five parameter estimates based on the reduced model (the right four columns). Column B is the estimated parameter. The model involves an interaction term between Scientific Content and Trust. Consider a new sample, with scientific content = 1. If we increase trust by one unit, then 
+
+    A. The log odds ratio of disseminating the information would decrease by 0.5
+    [B]. The log odds ratio of disseminating the information would decrease by 0.02
+    C. The probability of disseminating the information would decrease by 0.5
+    D. The probability of disseminating the information would decrease by 0.02
+
+
+
+
+
+
+
