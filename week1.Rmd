@@ -27,9 +27,10 @@ output:
 
 ## Lecture Note and R Examples
 
-  + Lecture Note: [[Intro to Statistics](notes/intro/Intro to Stat.pdf){target='_blank'}]
-  + Follow [this guide](rcode/week1/R-Intro.html){target='_blank'} to install R and RStudio __before class__
-  + Download [`r xfun::embed_file('docs/rcode/week1/practice.Rmd', text = 'this .rmd file')`] for in-class practice
+  + Lecture Notes
+    + [[Intro to Statistics](notes/intro/Intro to Stat.pdf){target='_blank'}]
+    + Follow [this guide](rcode/week1/R-Intro.html){target='_blank'} to install R and RStudio __before class__
+  + Download [`r xfun::embed_file('docs/rcode/week1/PracticeWeek1.Rmd', text = 'this .rmd file')`] for in-class practice
   + Download the [birthrate data](data/birthrate.csv){target='_blank'}(.csv data file) and save it into the same folder as your `.rmd` file
 
 ## NHANCE Data Example
