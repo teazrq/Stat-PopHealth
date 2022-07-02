@@ -174,25 +174,7 @@ Mathematical operations on vectors and matrices are, by default, element-wise. F
     summary(iris)
 ```
 
-### Practice questions
-
-  1. Attach a new numerical column to the `iris` data, as the product of `Petal.Length` and `Petal.Width` and name the column as `Petal.Prod`.
-```{r class.source = NULL, eval = FALSE}
-  iris = cbind(iris, "Petal.Prod" = iris$Petal.Length*iris$Petal.Width)
-  head(iris)
-```
-  2. Attach a new numerical column to the `iris` data, with value 1 if the observation is `setosa`, 2 for `versicolor` and 3 for `virginica`, and name the column as `Species.Num`.
-```{r class.source = NULL, eval = FALSE}
-  iris = cbind(iris, "Species.Num" = as.numeric(iris$Species))
-  head(iris)
-```
-  3. Change `Species.Num` to a factor variable such that it takes value "Type1" if the observation is `setosa` and "NA" otherwise.
-```{r class.source = NULL, eval = FALSE}
-  iris$Species.Num = as.factor(ifelse(iris$Species == "setosa", "Type1", "NA"))
-  head(iris)
-```
-
-## Readin and save data 
+## Readin and Save Data 
 
 Data can be imported from a variety of sources. More commonly, a dataset can be stored in `.txt` and `.csv` files. Such data reading methods require specific structures in the source file: the first row should contain column names, and there should be equal number of elements in each row. Hence you should always check your file before reading them in. 
 
@@ -226,43 +208,7 @@ R data can also be saved into other formats. The more efficient way, assuming th
     read.csv(file = "mydata.csv", row.names = 1)
 ```
 
-## Using and defining functions
-
-We have already used many functions. You can also define your own functions, and even build them into packages (more on this later) for other people to use. This is the main advantage of R. For example, let's consider writing a function that returns the minimum and maximum of a vector. Suppose we already know the `min()` and `max()` functions. 
-
-```{r}
-  myrange <- function(x) # x is the argument that your function takes in
-  {
-    return(c(min(x), max(x))) # return a vector that contains two elements
-  }
-
-  x = 1:10
-  myrange(x)
-  
-  # R already has this function
-  range(x)
-```
-
-### Practice questions
-
-  1. Define a function that takes in a numerical vector, and output the mean of that vector. Do this without using the `mean()` and `sum()` function.
-```{r class.source = NULL, eval = FALSE}
-  mymean <- function(x)
-  {
-    sum = 0
-    for (i in 1:length(x))
-      sum = sum + x[i]
-    
-    return(sum = sum / length(x))
-  }
-  
-  x = 1:10
-  mymean(x)
-  
-  mean(x)
-```  
-
-## Distribution and random numbers
+## Distribution and Random Numbers
 
 Three distributions that are most frequently used in this course are Bernoulli, Gaussian (normal), and $t$ distributions. Bernoulli distributions can be used to describe binary variables, while Gaussian distribution is often used to describe continuous ones. The following code generates some random variables
 
@@ -278,17 +224,33 @@ Three distributions that are most frequently used in this course are Bernoulli, 
 
 However, this result cannot be replicated by others, since the next time we run this code, the random numbers will be different. Hence it is important to set and keep the random seed when a random algorithm is involved. The following code will always generate the same result
 
-```{r}
+```{r out.width='50%'}
   set.seed(1)
   x = rbinom(100, 1, 0.4)
   y = rnorm(100) # by default, this is mean 0 and variance 1
   
   table(x)
-  hist(y)
+  hist(y, breaks = 20)
   boxplot(y ~ x)
 ```
 
-## Using packages and other resources
+## Statistical Functions
+
+We will use some basic statistical functions in this course, for example, standard deviation, variance, correlation, etc.. Here are some examples:
+
+```{r}
+  # standard deviation
+  sd(iris$Petal.Length)
+
+  # variance 
+  var(iris$Petal.Width)
+  
+  # correlation (this will be introduced later)
+  cor(iris$Petal.Length, iris$Petal.Width)
+```
+
+
+## Using Packages and Other Resources
 
 Packages are written and contributed to R by individuals. They provide additional features (functions or data) that serve particular needs. For example, the `ggplot2` package is developed by the RStudio team that provides nice features to plot data. We will have more examples of this later on, but first, let's install and load the package so that we can use these features. More details will be provided in the data visualization section. 
 
@@ -297,7 +259,7 @@ Packages are written and contributed to R by individuals. They provide additiona
   install.packages("ggplot2")
 ```
 
-```{r}
+```{r out.width='50%'}
   # to load the package
   library(ggplot2)
 
@@ -327,16 +289,30 @@ Often times, you may want to perform a new task and you don't know what function
   sapply(a, "[[", 1)
 ```
 
-## R Markdown: organized your work
+Many machine learning models are implemented through contributed packages. For example, this following code uses a CART (classification and regression tree) model to predict the class of iris data:
 
-R Markdown is a built-in feature of RStudio. It integrates plain text with chunks of R code in to a single file, which is extremely useful when constructing class notes or building a website. A `.rmd` file can be compiled into nice-looking `.html`, `.pdf`, and `.docx` file. For example, this entire guide is created using R Markdown. With RStudio, you can install R Markdown from R console using the following code. Note that this should be automatically done the first time you create and compile a `.rmd` file in RStudio.
+```{r}
+  # this package fits a tree model
+  library(rpart)
+  cart.fit <- rpart(Species ~., data = iris)
+  
+  # this package produces a nice plot
+  library(rpart.plot)
+  rpart.plot(cart.fit)
+```
+
+Whenever you need to use a new package, you can always find exmples by searching related key words online. 
+
+## RMarkdown: organized your work
+
+RMarkdown is a built-in feature of RStudio. It is <span style="color: red;">**not required**</span> in this course. You can complete the entire course material without using it. However, it offers many nice features. It integrates plain text with chunks of R code in to a single file, which is extremely useful when constructing class notes or building a website. A `.rmd` file can be compiled into nice-looking `.html`, `.pdf`, and `.docx` file. For example, this entire guide is created using R Markdown. With RStudio, you can install RMarkdown from R console using the following code. Note that this should be automatically done the first time you create and compile a `.rmd` file in RStudio.
 
 ```{r eval = FALSE}
   # Install R Markdown from CRAN
   install.packages("rmarkdown")
 ```
 
-You can also write formulas into the file using latex code. For example, $Y = X \beta + \epsilon$. This requires installing [TinyTex](https://yihui.org/tinytex/) if you don't have LaTex already:
+You can also write formulas into the file using latex code. For example, $Y = X \beta + \epsilon$. This requires installing [TinyTex](https://yihui.org/tinytex/) if you don't have some version of LaTex already:
 
 ```{r eval = FALSE}
   # Install TinyTex
@@ -359,47 +335,4 @@ You can then `Knit` the template file and start to explore its features.
 <center>
 ![](Knit.png){width=60%}
 </center>
-
-Keep in mind that R Markdown is <span style="color: red;">**not a required component**</span> of this course. You can complete the entire course material without using it. 
-
-## Simulation: An example
-
-The last topic in this guild is to go back to our statistical topic: hypothesis testing. We introduced the philosophy of hypothesis testing in our first lecture, the Lady tasting tea problem. Since we now have much greater computing power, let's consider using simulated data to construct a hypothesis testing procedure. Consider the following problem:
-
-  * A teacher is interested in knowing if the average final exam score of his class is above 85. 
-  * The class has 48 students and the scores follow independent normal distribution with standard deviation 10. 
-  * Question:
-      + What are the corresponding Null and Alternative hypotheses?
-      + What evidence would be considered as "extreme" evidence against the Null?
-      + Use an $\alpha$ value 0.05, and use simulation data to determine the cut-off value to reject the Null
-      + Suppose after the final exam, we observed the average score of this class is 87, should we reject or accept the Null?
-
-```{r out.width = "60%"}
-  # Null: average score = 85 vs. Alt. average score > 85
-  # First, we can simulate the scores from 48 students GIVEN that Null is true
-  x = rnorm(48, mean = 85, sd = 2)
-  mean(x)
-  # However, this is just one of such example, and we need to know whether the 87 we observed is surprising or not. 
-  # Hence we need to generate many of such "classes" and obtain the distribution of it
-  # Let's do this 1000 times, which should be sufficient
-  
-  set.seed(1)
-  
-  allaverage = rep(NA, 1000)
-  for (i in 1:1000)
-    allaverage[i] = mean(rnorm(48, mean = 85, sd = 10))
-  
-  ggplot(data.frame(allaverage), aes(x=allaverage)) + 
-    geom_histogram(aes(y=..density..), colour="black", fill="white") +
-    geom_density(alpha=.2, fill="#FF6666") +
-    labs(x = "Simulated Average Scores") + 
-    geom_vline(xintercept = 87, color = "blue", size = 1.2)
-    
-  # Now, a surprising result should fall into the top 5% of that distribution
-  quantile(allaverage, 0.95)
-  
-  # Hence, our observed value is not "surprising enough" and we should accept the Null hypothesis
-```
-
-
 
