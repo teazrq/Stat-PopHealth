@@ -2871,7 +2871,7 @@ div.tocify {
 <h1 class="title toc-ignore">Testing Mean Differences and
 Associations</h1>
 <h4 class="author">Ruoqing Zhu</h4>
-<h4 class="date">Last Updated: July 02, 2022</h4>
+<h4 class="date">Last Updated: July 04, 2022</h4>
 
 </div>
 
@@ -2886,8 +2886,32 @@ mistake when the alternative hypothesis is true?</li>
 <li>Discussion: What factors could affect the type II error?</li>
 </ul>
 </div>
-<div id="t-test" class="section level2">
-<h2>t-test</h2>
+<div id="z-test" class="section level2">
+<h2>z-test</h2>
+<p>Following the same assumptions as the our z-test question, suppose we
+are interested in testing whether the average score is <strong>smaller
+than 95</strong>. Can you obtain the <span class="math inline">\(p\)</span>-value of this test?</p>
+<pre class="r"><code>  pnorm(90 - 95, sd = 15/sqrt(48), lower.tail = TRUE)</code></pre>
+</div>
+<div id="one-sample-t-test" class="section level2">
+<h2>One Sample t-test</h2>
+<p>If we only get to observe the first 8 observations of the Age
+variable. Perform the same hypothesis testing problem, what is your
+conclusion? What is affecting the results? Discuss the impact of having
+a small sample size.</p>
+<pre class="r fold-show"><code>  heart = read.csv(&quot;processed_cleveland.csv&quot;)</code></pre>
+<pre class="r"><code>    t.test(heart$age[1:8], mu = 50, alternative = &quot;greater&quot;)
+## 
+##  One Sample t-test
+## 
+## data:  heart$age[1:8]
+## t = 1.5475, df = 7, p-value = 0.08284
+## alternative hypothesis: true mean is greater than 50
+## 95 percent confidence interval:
+##  48.59804      Inf
+## sample estimates:
+## mean of x 
+##     56.25</code></pre>
 </div>
 
 

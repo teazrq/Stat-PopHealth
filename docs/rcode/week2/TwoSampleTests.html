@@ -2871,7 +2871,7 @@ div.tocify {
 <h1 class="title toc-ignore">Testing Mean Differences and
 Associations</h1>
 <h4 class="author">Ruoqing Zhu</h4>
-<h4 class="date">Last Updated: July 02, 2022</h4>
+<h4 class="date">Last Updated: July 04, 2022</h4>
 
 </div>
 
@@ -2892,9 +2892,9 @@ Null?</li>
 <li>Use an <span class="math inline">\(\alpha\)</span> value 0.05, and
 use simulation data to determine the cut-off value to reject the
 Null</li>
+</ul></li>
 <li>Suppose after the final exam, we observed the average score of this
 class is 87, should we reject or accept the Null?</li>
-</ul></li>
 </ul>
 <p>First, since we are testing whether the mean score of the class of 48
 students is greater than 85, our Null and alternative hypotheses are</p>
@@ -2902,13 +2902,13 @@ students is greater than 85, our Null and alternative hypotheses are</p>
 \quad \text{vs.}  \quad \text{Alternative } H_1: \text{mean score &gt;
 85}\]</span> If we have very strong information against the Null, we
 could reject it. Now, we want to see what should be consider as
-“extreme” evidence against the Null. Consider the following idea:</p>
+“extreme” evidence against the Null, <strong>if the Null is
+true</strong>. Consider the following idea:</p>
 <ul>
-<li>Generate many “averages of 48 students” and obtain the distribution
-of the mean through simulation</li>
-<li>Determine a cut-off point based on the distribution (the extreme
-end), using a pre-defined <span class="math inline">\(\alpha\)</span>
-value</li>
+<li>Generate many “averages of 48 students” (based on the Null
+assumption) and obtain the distribution of these means</li>
+<li>Determine a cut-off value based on this distribution by looking at
+the extreme end, using a pre-defined <span class="math inline">\(\alpha\)</span> value</li>
 <li>Look at the actual observed mean value (87) and compare it to the
 cut-off value</li>
 <li>Accept or reject the Null hypothesis</li>
@@ -2935,12 +2935,13 @@ cut-off value</li>
 ## [1] 0.073</code></pre>
 <p>The distribution (of averages) we are trying to obtain from this
 simulation is called the “<strong>Null distribution</strong>”. And if
-our assumptions are true, then it would be around 7.3% of simulations
-that can be greater than 87. Hence, based on the 0.05 significance
-level, we will not reject this hypothesis.</p>
+our assumption (Null) is true, then it would be about 7.3% of those mean
+scores that would be greater than 87. By our 0.05 significance level,
+this is not extreme information. Hence, we will not reject this
+hypothesis.</p>
 <p>In fact, we can skip all the simulation process, and <strong>know the
 Null distribution exactly</strong>. This is mainly due to some
-statistical theories. And for all of the testing procedures in this
+statistical theories. In fact, for all the testing procedures in this
 lecture, we can always know the Null distribution, thanks to many early
 pioneers, such as <a href="https://en.wikipedia.org/wiki/Ronald_Fisher">Sir Ronald
 Fisher</a>, <a href="https://en.wikipedia.org/wiki/Karl_Pearson">Karl
@@ -3050,12 +3051,15 @@ normal distribution functions to help us.</p>
 <p>Example 1: Suppose we are interested in testing whether the average
 score is larger than 80. However, assume that the true ability of each
 student follows a normal distribution with SD = 15. And we actually
-observe the average test score as 90. Can you obtain the <span class="math inline">\(p\)</span>-value of this test?</p>
-<pre class="r"><code>  pnorm(90 - 80, sd = 15/sqrt(48), lower.tail = FALSE)</code></pre>
-<p>Example 2: Following the same assumptions as the previous question,
-suppose we are interested in testing whether the average score is
-<strong>smaller than 95</strong>. Can you obtain the <span class="math inline">\(p\)</span>-value of this test?</p>
-<pre class="r"><code>  pnorm(90 - 95, sd = 15/sqrt(48), lower.tail = TRUE)</code></pre>
+observe the average test score as 90. Can you obtain the <span class="math inline">\(p\)</span>-value of this test? The
+<code>pnorm()</code> function calculates the probability that a normal
+distribution (with given mean and sd) is greater than a certain
+value.</p>
+<pre class="r"><code>  # 90-80 is the value
+  # 15/sqrt(48) is sd
+  # mean is 0 by default
+  # lower.tail=FALSE means that we are looking at the upper side of the distribution
+  pnorm(90 - 80, sd = 15/sqrt(48), lower.tail = FALSE)</code></pre>
 </div>
 <div id="testing-mean-with-unknown-variance-t-test" class="section level2">
 <h2>Testing Mean with Unknown Variance: <span class="math inline">\(t\)</span>-test</h2>
@@ -3172,14 +3176,12 @@ fact, we can construct an interval that is wide enough to incorporate
 course.</p>
 <div id="practice-questions" class="section level3">
 <h3>Practice questions</h3>
-<ol style="list-style-type: decimal">
-<li>Following the same procedure as the previous question, test the
+<p>Following the same procedure as the previous question, test the
 following hypothesis by modifying the <code>t.test()</code> function:
 <span class="math display">\[H_0: \text{mean age = 60} \quad
 \text{vs.}  \quad H_1: \text{mean age &lt; 60}\]</span> What is the
 <span class="math inline">\(p\)</span>-value associated with this
-test?</li>
-</ol>
+test?</p>
 <pre class="r"><code>  t.test(heart$age[1:10], mu = 60, alternative= &quot;less&quot;)
 ## 
 ##  One Sample t-test
@@ -3192,24 +3194,6 @@ test?</li>
 ## sample estimates:
 ## mean of x 
 ##      56.6</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>If we only get to observe the first 8 observations of the Age
-variable. Perform the same hypothesis testing problem, what is your
-conclusion? What is affecting the results? Discuss the impact of having
-a small sample size.</li>
-</ol>
-<pre class="r"><code>    t.test(heart$age[1:8], mu = 50, alternative = &quot;greater&quot;)
-## 
-##  One Sample t-test
-## 
-## data:  heart$age[1:8]
-## t = 1.5475, df = 7, p-value = 0.08284
-## alternative hypothesis: true mean is greater than 50
-## 95 percent confidence interval:
-##  48.59804      Inf
-## sample estimates:
-## mean of x 
-##     56.25</code></pre>
 </div>
 </div>
 <div id="two-sample-t-test" class="section level2">

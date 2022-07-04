@@ -29,6 +29,23 @@ output:
   * Based on the testing procedure, what is the chance that we make a mistake when the alternative hypothesis is true?
   * Discussion: What factors could affect the type II error?
   
-## t-test
+## z-test
 
+Following the same assumptions as the our z-test question, suppose we are interested in testing whether the average score is **smaller than 95**. Can you obtain the $p$-value of this test?
+
+```{r class.source = NULL, eval = FALSE}
+  pnorm(90 - 95, sd = 15/sqrt(48), lower.tail = TRUE)
+```
+
+## One Sample t-test
+
+If we only get to observe the first 8 observations of the Age variable. Perform the same hypothesis testing problem, what is your conclusion? What is affecting the results? Discuss the impact of having a small sample size.
+
+```{r}
+  heart = read.csv("processed_cleveland.csv")
+```
+
+```{r class.source = NULL, eval = TRUE}
+    t.test(heart$age[1:8], mu = 50, alternative = "greater")
+```
 

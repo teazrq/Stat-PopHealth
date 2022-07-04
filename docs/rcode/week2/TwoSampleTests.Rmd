@@ -33,15 +33,15 @@ Suppose we have the following scenario:
       + What are the corresponding Null and Alternative hypotheses?
       + What evidence would be considered as "extreme" evidence against the Null?
       + Use an $\alpha$ value 0.05, and use simulation data to determine the cut-off value to reject the Null
-      + Suppose after the final exam, we observed the average score of this class is 87, should we reject or accept the Null?
+  * Suppose after the final exam, we observed the average score of this class is 87, should we reject or accept the Null?
 
 First, since we are testing whether the mean score of the class of 48 students is greater than 85, our Null and alternative hypotheses are
 
 $$\text{Null } H_0: \text{mean score = 85} \quad \text{vs.}  \quad \text{Alternative } H_1: \text{mean score > 85}$$
-If we have very strong information against the Null, we could reject it. Now, we want to see what should be consider as "extreme" evidence against the Null. Consider the following idea:
+If we have very strong information against the Null, we could reject it. Now, we want to see what should be consider as "extreme" evidence against the Null, __if the Null is true__. Consider the following idea:
 
-  * Generate many "averages of 48 students" and obtain the distribution of the mean through simulation
-  * Determine a cut-off point based on the distribution (the extreme end), using a pre-defined $\alpha$ value
+  * Generate many "averages of 48 students" (based on the Null assumption) and obtain the distribution of these means
+  * Determine a cut-off value based on this distribution by looking at the extreme end, using a pre-defined $\alpha$ value
   * Look at the actual observed mean value (87) and compare it to the cut-off value
   * Accept or reject the Null hypothesis
 
@@ -69,9 +69,9 @@ If we have very strong information against the Null, we could reject it. Now, we
   mean(allaverage > 87)
 ```
 
-The distribution (of averages) we are trying to obtain from this simulation is called the "**Null distribution**". And if our assumptions are true, then it would be around 7.3% of simulations that can be greater than 87. Hence, based on the 0.05 significance level, we will not reject this hypothesis. 
+The distribution (of averages) we are trying to obtain from this simulation is called the "**Null distribution**". And if our assumption (Null) is true, then it would be about 7.3% of those mean scores that would be greater than 87. By our 0.05 significance level, this is not extreme information. Hence, we will not reject this hypothesis. 
 
-In fact, we can skip all the simulation process, and **know the Null distribution exactly**. This is mainly due to some statistical theories. And for all of the testing procedures in this lecture, we can always know the Null distribution, thanks to many early pioneers, such as [Sir Ronald Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher), [Karl Pearson](https://en.wikipedia.org/wiki/Karl_Pearson) and [William Gosset](https://en.wikipedia.org/wiki/William_Sealy_Gosset).  
+In fact, we can skip all the simulation process, and **know the Null distribution exactly**. This is mainly due to some statistical theories. In fact, for all the testing procedures in this lecture, we can always know the Null distribution, thanks to many early pioneers, such as [Sir Ronald Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher), [Karl Pearson](https://en.wikipedia.org/wiki/Karl_Pearson) and [William Gosset](https://en.wikipedia.org/wiki/William_Sealy_Gosset).
 
 In short, the distribution of the average of 48 students, **if** each of them follows independently from normal distribution of mean 85 and standard deviation (SD) 10, would be normal distribution with mean 85 and standard deviation $10/\sqrt{48}$. We can compare the theoretical distribution with the simulated data obtained previously. They are in fact very similar. 
 
@@ -128,17 +128,14 @@ Based on our preliminary analysis, we will decide to reject the Null hypothesis 
 
 Formally, the above test is call the z-test. Besides the statistical mechanism that we have already talked about, one crucial thing about z-test is assuming that the standard deviation ($\sigma$) of a score is already know. This is usually not the case is practice. Hence, z-test is rarely used in practice unless we have strong prior information. Nonetheless, if we want to obtain the theoretical p-value from a test, we can use the normal distribution functions to help us. 
 
-
-Example 1: Suppose we are interested in testing whether the average score is larger than 80. However, assume that the true ability of each student follows a normal distribution with SD = 15. And we actually observe the average test score as 90. Can you obtain the $p$-value of this test?
+Example 1: Suppose we are interested in testing whether the average score is larger than 80. However, assume that the true ability of each student follows a normal distribution with SD = 15. And we actually observe the average test score as 90. Can you obtain the $p$-value of this test? The `pnorm()` function calculates the probability that a normal distribution (with given mean and sd) is greater than a certain value. 
 
 ```{r class.source = NULL, eval = FALSE}
+  # 90-80 is the value
+  # 15/sqrt(48) is sd
+  # mean is 0 by default
+  # lower.tail=FALSE means that we are looking at the upper side of the distribution
   pnorm(90 - 80, sd = 15/sqrt(48), lower.tail = FALSE)
-```
-
-Example 2: Following the same assumptions as the previous question, suppose we are interested in testing whether the average score is **smaller than 95**. Can you obtain the $p$-value of this test?
-
-```{r class.source = NULL, eval = FALSE}
-  pnorm(90 - 95, sd = 15/sqrt(48), lower.tail = TRUE)
 ```
   
 ## Testing Mean with Unknown Variance: $t$-test
@@ -149,9 +146,9 @@ $$ \hat\sigma^2 = \frac{1}{n} \sum_{i=1}^n (x_i - \bar x)^2$$
 You may have also seen another version, which is trying to correct the bias in the variance estimation. They are very close as long as **$n$ is large**. 
 
 $$ \hat\sigma^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar x)^2$$
-The standard deviation estimation is simply taking a square-root of $\hat\sigma^2$. 
+The standard deviation estimation is simply taking a square-root of $\hat\sigma^2$.
 
-We will introduce several $t$-tests that utilize this quantity and the $t$-distribution. 
+We will introduce several $t$-tests that utilize this quantity and the $t$-distribution.
 
   * One sample $t$-test 
   * Two sample $t$-test 
@@ -206,16 +203,11 @@ Let's look at some of the outputs in this function:
 
 ### Practice questions
 
-  1. Following the same procedure as the previous question, test the following hypothesis by modifying the `t.test()` function:
+Following the same procedure as the previous question, test the following hypothesis by modifying the `t.test()` function:
   $$H_0: \text{mean age = 60} \quad \text{vs.}  \quad H_1: \text{mean age < 60}$$
   What is the $p$-value associated with this test?
 ```{r class.source = NULL, eval = TRUE}
   t.test(heart$age[1:10], mu = 60, alternative= "less")
-```
-
-  2. If we only get to observe the first 8 observations of the Age variable. Perform the same hypothesis testing problem, what is your conclusion? What is affecting the results? Discuss the impact of having a small sample size.
-```{r class.source = NULL, eval = TRUE}
-    t.test(heart$age[1:8], mu = 50, alternative = "greater")
 ```
 
 ## Two sample $t$-test 
