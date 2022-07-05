@@ -1,0 +1,80 @@
+---
+title: "TBL Week 1"
+author: "Ruoqing Zhu"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+  options(width = 1000)
+  knitr::opts_chunk$set(fig.width=9, fig.height=7, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(class.source = "fold-show")
+  knitr::opts_chunk$set(collapse=TRUE)
+```
+
+## Load Data
+
+Readin the birthrate data using the code in the R-Intro lecture note. Use the data for TBL. 
+
+```{r}
+    # read-in data
+    birthrate = read.csv("birthrate.csv")
+    head(birthrate)
+    
+    # to see how many observations (rows) and variables (columns) in a dataset
+    dim(birthrate)
+```
+
+## Question 1
+
+Calculate the mean of birth rate.
+
+```{r}
+  mean(birthrate$Birthrate)
+  sd(birthrate$Birthrate)
+  mean(birthrate$Year)
+  sd(birthrate$Year)
+```
+
+## Question 2
+
+Calculate the standard deviation of birth rate on or before 1950.
+
+```{r}
+  sd(birthrate$Birthrate[birthrate$Year <= 1950])
+  sd(birthrate$Birthrate[birthrate$Year < 1950])
+  sd(birthrate$Birthrate[birthrate$Year > 1950])
+  sd(birthrate$Birthrate[birthrate$Year >= 1950])
+```
+
+## Question 3
+
+Which year has the highest birth rate?
+
+```{r}
+  birthrate$Year[which.max(birthrate$Birthrate)]
+```
+
+
+## Question 4
+
+Which of the following most accurately describes the birth rate pattern between 1940 and 1960? 
+
+```{r}
+  plot(birthrate$Year, birthrate$Birthrate)
+```
+
+
+
+

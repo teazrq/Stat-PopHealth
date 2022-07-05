@@ -75,3 +75,17 @@ Attach a new numerical column to the `iris` data, as the product of `Petal.Lengt
   iris = cbind(iris, "Petal.Prod" = iris$Petal.Length*iris$Petal.Width)
   head(iris)
 ```
+
+## Load Data
+
+Readin the birthrate data using the code in the R-Intro lecture note. Use the data for TBL. 
+
+```{r}
+    # read-in data
+    birthrate = read.csv("birthrate.csv")
+    head(birthrate)
+    
+    # to see how many observations (rows) and variables (columns) in a dataset
+    dim(birthrate)
+```
+
