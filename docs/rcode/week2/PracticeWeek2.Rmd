@@ -23,12 +23,30 @@ output:
   knitr::opts_chunk$set(collapse=TRUE)
 ```
 
-## Discussion p-values
+## Discussion on p-values
   
   * If we get $p$-value $=0$ (in certain situations we could), can we know for sure that the Null hypothesis is wrong?
   * Based on the testing procedure, what is the chance that we make a mistake when the alternative hypothesis is true?
   * Discussion: What factors could affect the type II error?
+
+## Distribution of Means
+
+Try to modify the simulation code we had in the simulation example. For each student, let's generate their score using a uniform distribution from 0 to 100. For each class, let's assume that there are 50 students. What would the distribution of the average look like? Do you expect it to be a uniform distribution with a narrower range? Try to replicate the simulation study to obtain the 95% upper quantile of that distribution. 
+
+```{r class.source = NULL, eval = TRUE}
+  # Generate 1000 such "classes" and obtain the distribution
+  set.seed(3)
   
+  allaverage = rep(NA, 1000)
+  for (i in 1:1000)
+    allaverage[i] = mean(runif(50, min = 0, max = 100))
+  
+  # Now, a surprising result should fall into the top 5% of that distribution
+  hist(allaverage)
+  quantile(allaverage, 0.95)
+```
+
+
 ## z-test
 
 Following the same assumptions as the our z-test question, suppose we are interested in testing whether the average score is **smaller than 95**. Can you obtain the $p$-value of this test?
@@ -39,13 +57,50 @@ Following the same assumptions as the our z-test question, suppose we are intere
 
 ## One Sample t-test
 
-If we only get to observe the first 8 observations of the Age variable. Perform the same hypothesis testing problem, what is your conclusion? What is affecting the results? Discuss the impact of having a small sample size.
+If we only get to observe the first 10 observations of the Age variable: `heart$age[1:10]`. Perform the same hypothesis testing problem, what is your conclusion? What is affecting the results? Discuss the impact of having a small sample size.
 
 ```{r}
   heart = read.csv("processed_cleveland.csv")
 ```
 
 ```{r class.source = NULL, eval = TRUE}
-    t.test(heart$age[1:8], mu = 50, alternative = "greater")
+    t.test(heart$age[1:10], mu = 50, alternative = "greater")
 ```
 
+What if we need to test the following hypothesis:
+
+$$H_0: \text{mean age = 60} \quad \text{vs.}  \quad H_1: \text{mean age < 60}$$
+Modify the `t.test()` code by changing the `mu` and `alternative` options, and obtain the $p$-value associated with this test.
+
+```{r class.source = NULL, eval = TRUE}
+  t.test(heart$age[1:10], mu = 60, alternative= "less")
+```
+
+
+## Two Sample t-test
+
+A researcher is interested in testing whether the `chol` level is the same for these two groups: Age $<$ 60 and Age $\geq$ 60. 
+
+$$H_0: \text{chol}_{\,\text{Age} < 60} = \text{chol}_{\,\text{Age} \geq 60} \quad \text{vs.} \quad H_1: \text{chol}_{\,\text{Age} < 60} \neq \text{chol}_{\,\text{Age} \geq 60}$$
+Perform the corresponding test using the Cleveland heart disease data. Use a two-sided test, with equal variance assumption. 
+
+```{r class.source = NULL, eval = TRUE}
+  chol_smallage = heart$chol[heart$age < 60]
+  chol_largeage = heart$chol[heart$age >= 60]
+  t.test(chol_smallage, chol_largeage, alternative = "two.sided", var.equal = TRUE)
+```
+
+## $\chi^2$ test
+
+First, create two dummy variables from the heart data
+
+  * Whether `chol` is greater than 250
+  * Whether `num` is greater than 0
+  
+Test the association between these two variables. What is the $p$ value?
+
+```{r class.source = NULL, eval = TRUE}
+  chol_new = (heart$chol > 250)
+  num_new = (heart$num > 0)
+  chisq.test(chol_new, num_new)
+```

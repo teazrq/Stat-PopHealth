@@ -140,10 +140,7 @@ Example 1: Suppose we are interested in testing whether the average score is lar
   
 ## Testing Mean with Unknown Variance: $t$-test
 
-As we explained before, often times, We need to estimate the standard deviation $\sigma$ or the variance $\sigma^2$. This is done by calculating the sample variance
-
-$$ \hat\sigma^2 = \frac{1}{n} \sum_{i=1}^n (x_i - \bar x)^2$$
-You may have also seen another version, which is trying to correct the bias in the variance estimation. They are very close as long as **$n$ is large**. 
+As we explained before, often times, We need to estimate the standard deviation $\sigma$ or the variance $\sigma^2$. This is done by calculating the (unbiased) sample variance
 
 $$ \hat\sigma^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar x)^2$$
 The standard deviation estimation is simply taking a square-root of $\hat\sigma^2$.
@@ -183,7 +180,7 @@ Let's look at some of the outputs in this function:
   * 95 percent confidence interval. This is a quantity reversely calculated from the formula to make inference about the true mean. We will explain this later. 
   * mean of $x$ is just the sample mean of age. 
 
-**Remark of the $t$ distribution**: A $t$ distribution with 1 DOF has much heavier tail than the normal distribution, hence is more "spread out". You can notice from the plot below that as the degrees of freedom increases, the distribution becomes closer and closer to a standard normal distribution. 
+**Remark on the $t$ distribution**: A $t$ distribution with 1 DOF has much heavier tail than the normal distribution, hence is more "spread out". You can notice from the plot below that as the degrees of freedom increases, the distribution becomes closer and closer to a standard normal distribution. 
 
 ```{r class.source = NULL, out.width = "60%", fig.height=4}
   x = seq(-5, 5, 0.01)
@@ -199,16 +196,7 @@ Let's look at some of the outputs in this function:
     theme(legend.key.size = unit(2, 'cm'))
 ```
 
-**Remark of the confidence interval**: An interesting phenomenon about the sample mean $\bar x$ is that, it will concentrate around the true population mean. And as the sample size increases, this concentration becomes tighter. This phenomenon is called the [Central Limit Theorem](https://en.wikipedia.org/wiki/Central_limit_theorem). This is the foundation of almost all statistical research. In our context, the sample mean would eventfully varies around the true population mean, hence, the true population mean (unknown) should also be somewhere near the sample mean, as the sample size increases. And the amount of variation is quantified by $\hat\sigma / \sqrt{n}$. Based on this fact, we can construct an interval that is wide enough to incorporate 95% of the uncertainty and draw inference of $\mu$. The details of this is beyond this course. 
-
-### Practice questions
-
-Following the same procedure as the previous question, test the following hypothesis by modifying the `t.test()` function:
-  $$H_0: \text{mean age = 60} \quad \text{vs.}  \quad H_1: \text{mean age < 60}$$
-  What is the $p$-value associated with this test?
-```{r class.source = NULL, eval = TRUE}
-  t.test(heart$age[1:10], mu = 60, alternative= "less")
-```
+**Remark on the confidence interval**: An interesting phenomenon about the sample mean $\bar x$ is that, it will concentrate around the true population mean. And as the sample size increases, this concentration becomes tighter. This phenomenon is called the [Central Limit Theorem](https://en.wikipedia.org/wiki/Central_limit_theorem). This is the foundation of almost all statistical research. In our context, the sample mean would eventfully varies around the true population mean, hence, the true population mean (unknown) should also be somewhere near the sample mean, as the sample size increases. And the amount of variation is quantified by $\hat\sigma / \sqrt{n}$. Based on this fact, we can construct an interval that is wide enough to incorporate 95% of the uncertainty and draw inference of $\mu$. The details of this is beyond this course. 
 
 ## Two sample $t$-test 
 
@@ -236,7 +224,7 @@ Of course, you can imaging if we **do not assume equal variance**, there will be
   t.test(male_age, female_age, alternative = "two.sided", var.equal = FALSE)
 ```
 
-**Remark on the paired $t$-test.** This is a special case, when each subject is observed twice and we want to know if the first measurement is different from the second measurement, on average within this population. This is very popular in clinical trials. A theoretical problem is that if we estimate the pooled variance, it can be very large, and lead to insignificance. The strategy is to take the different between the two measurements from the same subject, and treat these differences as a one-sample $t$-test using 0 as the Null hypothesis. The following code demonstrate this effect. 
+**Remark on the paired $t$-test.** This is a special case, when each subject is observed twice and we want to know if the first measurement is different from the second measurement, on average within this population. This is very popular in clinical trials. A theoretical problem is that if we estimate the pooled variance, it can be very large, and lead to insignificance. The strategy is to take the different between the two measurements from the same subject, and treat these differences as a one-sample $t$-test using 0 as the Null hypothesis. The following code demonstrates this effect. 
 ```{r}
   x1 = rnorm(100)
   x2 = x1 + 0.2 + rnorm(100, sd = 0.1)
@@ -278,8 +266,8 @@ An alternative way of doing this test is called the Fisher's exact test. This te
 
 In all of the above examples, we assumed that we can only observe the samples once. Let's assume that there are 100 researchers, and each of them would observe their own samples. 
 
-  * Using the same testing procedure, will they arrive the same conclusion? 
-  * On average, how many of them would end up with a wrong conclusion? 
-  * What conditions could affect that result? 
+  * Using the same testing procedure, will they arrive the same conclusion?
+  * On average, how many of them would end up with a wrong conclusion?
+  * What conditions could affect that result?
 
 In genetic research, such as the [genome-wide association studies](https://www.nature.com/articles/nrg1522), [multiple testings and false discoveries](https://en.wikipedia.org/wiki/Multiple_comparisons_problem) are important issues. 
