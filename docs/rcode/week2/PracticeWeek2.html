@@ -2876,8 +2876,8 @@ Associations</h1>
 </div>
 
 
-<div id="discussion-p-values" class="section level2">
-<h2>Discussion p-values</h2>
+<div id="discussion-on-p-values" class="section level2">
+<h2>Discussion on p-values</h2>
 <ul>
 <li>If we get <span class="math inline">\(p\)</span>-value <span class="math inline">\(=0\)</span> (in certain situations we could), can
 we know for sure that the Null hypothesis is wrong?</li>
@@ -2984,7 +2984,8 @@ disease data. Use a two-sided test, with equal variance assumption.</p>
 <li>Whether <code>chol</code> is greater than 250</li>
 <li>Whether <code>num</code> is greater than 0</li>
 </ul>
-<p>Test the association between these two variables. What is the <span class="math inline">\(p\)</span> value?</p>
+<p>Test the association between these two variables. What is the <span class="math inline">\(p\)</span> value? What is the clinical meaning of
+this test?</p>
 <pre class="r"><code>  chol_new = (heart$chol &gt; 250)
   num_new = (heart$num &gt; 0)
   chisq.test(chol_new, num_new)

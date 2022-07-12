@@ -1,0 +1,83 @@
+---
+title: "TBL Week 1"
+author: "Ruoqing Zhu"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+  options(width = 1000)
+  knitr::opts_chunk$set(fig.width=9, fig.height=7, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(class.source = "fold-show")
+  knitr::opts_chunk$set(collapse=TRUE)
+```
+
+## Load Data
+
+Readin the birthrate data using the code in the R-Intro lecture note. Use the data for TBL. 
+
+```{r}
+    # read-in data
+    heart = read.csv("processed_cleveland.csv")
+    head(heart)
+```
+
+## Question 1
+
+Let's just observe the first 40 observations of the Age variable. Perform a hypothesis test for whether the mean age is greater than 50.
+
+```{r}
+  t.test(heart$age[1:40], mu = 50, alternative= "greater")
+  t.test(heart$age[1:40], mu = 50, alternative= "less")$p.value
+  t.test(heart$age[1:40], mu = 60, alternative= "greater")$p.value
+  t.test(heart$age[1:10], mu = 50, alternative= "greater")$p.value
+```
+
+## Question 2
+
+Let's use all observations of the chol variable. Perform a hypothesis test for whether the mean chol is different than 250. 
+
+```{r}
+  t.test(heart$chol, mu = 250, alternative = "two.sided")
+  t.test(heart$chol, mu = 250, alternative = "greater")$p.value
+  t.test(heart$chol, mu = 250, alternative = "less")$p.value
+  t.test(heart$chol, mu = 50)$p.value
+```
+
+
+## Question 3
+
+Test whether the mean chol is different across different gender. What is the p value? Use the equal variance assumption. 
+
+```{r}
+  male_chol = heart$chol[heart$sex == 1]
+  female_chol = heart$chol[heart$sex == 0]
+  t.test(male_chol, female_chol, alternative = "two.sided", var.equal = TRUE)
+  
+  t.test(male_chol, female_chol, alternative = "greater", var.equal = TRUE)$p.value
+  t.test(male_chol, female_chol, alternative = "less", var.equal = TRUE)$p.value
+```
+
+## Question 4
+
+First, using all observations, create a dummy variable from the heart data
+
+  * Whether `chol` is greater than 250
+
+Test the association between this variable and sex. What is the $p$ value?
+
+```{r class.source = NULL, eval = TRUE}
+  chol_new = (heart$chol > 250)
+  chisq.test(chol_new, heart$sex)
+```

@@ -76,7 +76,6 @@ Modify the `t.test()` code by changing the `mu` and `alternative` options, and o
   t.test(heart$age[1:10], mu = 60, alternative= "less")
 ```
 
-
 ## Two Sample t-test
 
 A researcher is interested in testing whether the `chol` level is the same for these two groups: Age $<$ 60 and Age $\geq$ 60. 
@@ -97,7 +96,7 @@ First, create two dummy variables from the heart data
   * Whether `chol` is greater than 250
   * Whether `num` is greater than 0
   
-Test the association between these two variables. What is the $p$ value?
+Test the association between these two variables. What is the $p$ value? What is the clinical meaning of this test? 
 
 ```{r class.source = NULL, eval = TRUE}
   chol_new = (heart$chol > 250)
