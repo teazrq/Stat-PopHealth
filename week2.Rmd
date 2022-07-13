@@ -25,7 +25,7 @@ output:
   + Lecture Notes
     + [[Two Sample Tests](rcode/week2/TwoSampleTests.html){target='_blank'}]
   + Download [`r xfun::embed_file('docs/rcode/week2/PracticeWeek2.Rmd', text = 'week 2 practice .rmd file')`]
-  + Download the [Cleveland Clinic Heart Disease Dataset](notes/week2/processed_cleveland.csv){target='_blank'} in `.csv` format. This data is also available on [Kaggle](https://www.kaggle.com/aavigan/cleveland-clinic-heart-disease-dataset).
+  + Download the [Cleveland Clinic Heart Disease Dataset](rcode/week2/processed_cleveland.csv){target='_blank'} in `.csv` format. This data is also available on [Kaggle](https://www.kaggle.com/aavigan/cleveland-clinic-heart-disease-dataset).
   
 ## Further Reading
 
