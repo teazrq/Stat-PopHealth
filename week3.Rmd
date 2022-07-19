@@ -16,13 +16,19 @@ output:
 ## Weekly Objectives
 
   * Use linear regression in R to model continuous outcomes and be able to interpret its parameters
-  * Use logistic regression in R to model binary outcomes and understand odds ratio and relative risk
+  * Understand odds ratio and relative risk
   * Understand the logistic link and be able to interpret the parameter estimates in a logistic regression
-  * Use R functions to evaluate model accuracy of a classification model
+  * Know different ways to evaluate model accuracy of a classification model
   * Understand the bias caused by censoring 
-  * Use log-rank test and Cox proportional hazard model in R for survival outcomes
+  * Understand log-rank test and Cox proportional hazard model for survival outcomes
   
-## Lecture Note
+## Lecture Note and R Examples
 
+  + Lecture Notes
+    + [[Linear Regression](rcode/week3/LinearReg.html){target='_blank'}]
+  + Download [`r xfun::embed_file('docs/rcode/week3/PracticeWeek3.Rmd', text = 'week 3 practice .rmd file')`]
+  + Download the [skin cancer Dataset](data/skin.txt){target='_blank'} in `.txt` format
 
 ## Homework
+
+  + Sections 5.7 from the BPS textbook

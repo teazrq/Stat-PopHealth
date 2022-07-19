@@ -1,0 +1,369 @@
+---
+title: "Linear Regression"
+author: "Ruoqing Zhu"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+  options(width = 1000)
+  knitr::opts_chunk$set(fig.width=9, fig.height=6, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(class.source = "fold-show")
+  knitr::opts_chunk$set(collapse=TRUE)
+```
+
+## Overview
+
+The document focus on introducing linear regression models. We will start with the correlation of coefficient, which is the most commonly used measure for describing the relationship between two continuous variables. We emphasis that correlation is different from independence, although there are always confusions about them in practice. Secondly, we will introduce the simple linear regression. This is essentially the same as fitting a correlation, but also include the intercept term. Using the `lm()` function is the focus here. And we will discuss several important outputs in a fitted model. Thirdly, we extend this to multiple linear regression. From a coding perspective, there is no difference. However, the mathematics behind it can be complicated. The important concept here is confounding variables and colinearity, which can always causing trouble in practice. 
+
+## Correlation
+
+Correlation is one of the most commonly used concept in statistics when analyzing the relationship between continuous variables. The most popular mathematical definition, [Pearson correlation](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient) is named after [Karl Pearson](https://en.wikipedia.org/wiki/Karl_Pearson). However, the concept was proposed by [Francis Galton](https://en.wikipedia.org/wiki/Francis_Galton) in 1888. Galton studied the association between the average height of parents and the height of their adult child. The data can be loaded from the `HistData` package. 
+
+```{r}
+  library(HistData)
+  data(GaltonFamilies)
+  GaltonFamilies
+```
+
+### Definition 
+
+The sample Pearson correlation between two variables, $X$ and $Y$, is defined as 
+
+$$ r_{xy} = \frac{\sum_i (x_i - \bar x)(y_i - \bar y)}{(n-1)\hat\sigma_x \hat\sigma_y }$$
+where the $\hat\sigma_x$ and $\hat\sigma_y$ are the unbiased sample standard deviations. Here are some explanation of this formula:
+
+  * The numerator quantifies how much the two variables changes together (from their respective centers $\bar x$ and $\bar y$)
+  * The denominator is the product of two standard deviations. You can think of this as pre-scaling the observed data by their standard deviations around their respective canters. This will also make the whole quantity to be within $[-1, 1]$.
+  * When this correlation is -1 or 1, there is a perfect correlation. Mathematically, this implies that $x_i - \bar x$ equals $c \times (y_i - \bar y)$ for all subject $i$, with a constant $c$. This means that, once we center both variables, one variable is just a scale change from the other. And the sign of that scaling factor determines if its a negative or a positive correlation. 
+
+### Calcucating and Interpreting the Sample Correlation
+
+To calculate the Pearson correlation, we can use the `cor()` function
+
+```{r}
+  cor(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight)
+  plot(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight, 
+       xlab = "Average Parent Height", ylab = "Child Height",
+       pch = 19, cex = 0.5, main = "Galton Data", col = "deepskyblue")
+  legend("bottomright", "Correlation = 0.321", cex = 1.5)
+```
+
+As we can see, there is a positive trend how two variables move together. However, this correlation is not very strong. In practice, it is difficult to decide whether a correlation is strong or not. [Cohen (1988)](https://scholar.google.com/scholar_lookup?title=Statistical%20power%20analysis%20for%20the%20behavioral%20sciences&author=J.%20Cohen&publication_year=1988) suggests that 0.1 is weak, 0.3 is moderate, while 0.5 is strong. However, this is a very field-specific concept. For example, [Gignac and Szodorai (2016)](https://www.sciencedirect.com/science/article/pii/S0191886916308194?casa_token=Vw-n84luM58AAAAA:PH6uejJ7c6ozR0XYjuxezLzIjgtpZ6FDlNsEDCbDt-whn0dP7jgTnJrUqDHyfq6psRfIR9wgMQ) reported that less than $3\%$ of correlations reported in the psychology literature were found to be as large as 0.5. In biomedical studies, it is also rare to see very strong correlation between a single biomarker and a certain disease. Hence, you need to make the judgment accordingly. The following plots of different correlation magnitude may give you an idea:
+
+```{r out.width = "90%", class.source = NULL}
+  library(MASS)
+  set.seed(2)
+  par(mfrow=c(2, 3)) # this sets multiple plots
+  par(mar=c(1, 1, 2, 1)) # this sets margins for each of them
+  corxy = c(-0.5, 0, 0.25, 0.5, 0.7, 0.9)
+  for (i in 1:6)
+  {
+    # this code generates variables from a multivariate normal distribution with correlated variables
+    xy = mvrnorm(500, mu = c(0, 0),
+                 Sigma = matrix(c(1, corxy[i], corxy[i], 1), 2, 2))
+    plot(xy[, 1], xy[, 2], xaxt='n', yaxt='n',
+         pch = 19, cex = 0.5, col = "darkorange",
+         main = paste("Correlation approx.", corxy[i]))
+  }
+```
+
+### Testing Significance 
+
+A statistical test can be used to determine if the **population correlation coefficient** is different from zero or not. Note that what we introduced before is the **sample correlation coefficient**, which can be calculated from a collected sample. However, this sample is only a representation of the entire population, which has a true correlation $\rho_{xy}$. Hence, we may be able to make inference about $\rho_{xy}$ from the collected samples. Formally, the hypothesis is 
+
+$$H_0: \rho_{xy} = 0 \quad \text{vs.}  \quad H_1: \rho_{xy} \neq 0.$$
+In fact, the test statistic is very simple, 
+
+$$ t = \frac{r_{xy} \sqrt{n-2}}{\sqrt{1 - r_{xy}^2}},$$
+
+which follows a $t$ distribution with $n-2$ degrees of freedom. This can be done completely with `R`. 
+
+```{r}
+  cor.test(GaltonFamilies$midparentHeight, GaltonFamilies$childHeight)
+```
+
+The result turns out to be highly significant. Take a moment to think about what is the interpretation of a signification p-value. 
+However, keep in mind that this is only testing if the true correlation is zero or not. It does not reflect whether the correlation is strong or not. Large sample size will often lead to higher significance. 
+
+### Relationship with independence
+
+**Uncorrelated should be not confused with independence**. This following example generates uncorrelated (theoretically) variables 
+
+```{r out.width = "90%", fig.height=4}
+  set.seed(1)
+  x = rnorm(1000)
+  y = x + rnorm(1000, sd = 0.5)
+  z = y^2
+  par(mfrow=c(1, 2))
+  par(mar=c(4, 4, 1, 1))
+  plot(x, y, pch = 19, cex = 0.2)
+  plot(x, z, pch = 19, cex = 0.2)
+  cor(x, y)
+  cor(x, z)
+```
+
+Its easy to see that although $X$ and $Y$ have very high correlation (0.899), the sample correlation between $X$ and $Z$ is almost zero (-0.022). However, we cannot say that $x$ and $z$ are independent. There is a precise [definition of independence](https://en.wikipedia.org/wiki/Independence_(probability_theory)) in statistics by stating the joint distribution as the product of two marginal distributions. But that concept could be a bit difficult to explain without proper mathematical background. However, you can think about this conceptual understanding of independence: 
+
+  * If we restrict ourselves to a small range of $x$, and look at what is the distribution of $y$ given that $x$ is within that range, then that distribution (including mean, spread, etc) of $y$ is the same regardless of the specific range you considered for $x$. 
+
+This is clearly not the case between $x$ and $y$ (or $x$ and $z$) in our previous plot, since as $x$ changes, the mean of $y$ (or $z$) is shifting. 
+
+On the opposite side, if two variables are independent, then the correlation has to be 0. But keep in mind that this is a statement regarding the entire population, and the sample (possibly small) you collected will always have variations. 
+
+### Other types of correlation measures
+
+The Pearson correlation has some assumptions associated with it. One of the most crucial one is that both variables should be normally distributed. You may still use the Pearson correlation if there is a mild violation. However, you should consider rank based correlation, such as [Spearman](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient) and [Kendall's $\tau$](https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient) in other cases. Another, relatively new, choice is the [distance correlation](https://en.wikipedia.org/wiki/Distance_correlation). It is able to handle more complex dependencies. This can be calculated using the `energy` package. 
+
+
+## Simple Linear Regression
+
+While the correlation between two variables can describe their association, it does not provide a tool to predict one variable from another. Linear regression can be used for that purpose. Here is an example of skin cancer data. This data was collected in 1950 when there were 48 states (without Alaska and Hawaii), and Washington, D.C. was included as a 49th state. We plot the latitude against the mortality rate (number of deaths per 10 million people) of these 49 observations.
+
+```{r}
+    skincancer = read.table("skin.txt", header = TRUE)
+    par(mar = c(4,4,0.5,0.5))
+    plot(Mort ~ Lat, data = skincancer, pch = 19, col = "deepskyblue",
+         xlab = "Latitude", ylab = "Mortality Rate")
+```
+
+We can see that their is an association between the two, and can be approximated by a linear relationship. If we need to place a line on this plot to describe this linear relationship, what angle and intercept should that line have? How do we define the **optimal line** using the samples collected? 
+
+```{r}
+  par(mar = c(4,4,0.5,0.5))
+  plot(Mort ~ Lat, data = skincancer, pch = 19, col = "deepskyblue",
+       xlab = "Latitude", ylab = "Mortality Rate")
+  
+  # some random lines?
+  abline(350, -5, col = "darkorange", lwd = 2)
+  abline(420, -7, col = "darkorange", lwd = 2)
+```
+
+### The Optimal Line
+
+[Legendre](https://en.wikipedia.org/wiki/Adrien-Marie_Legendre) proposed a method called the **least square** approach for solving linear regression systems. A **simple linear regression** concerns modeling the relationship
+
+$$Y = \beta_0 + \beta_1 X + \epsilon.$$
+Here $X$ is called a covariate (or independent variable) and $Y$ is called a outcome variable (or response, dependent variable). $\epsilon$ is used here to absorb any unexplained effect, they are also called the random noise, or random error. 
+
+Once we collect a set of observations $\{x_i, y_i\}$, $i = 1, \ldots, n$, the **least square** approach means that we want to find a line to minimize the following objective function:
+
+$$\{\hat \beta_0, \hat \beta_1\} = \underset{\beta_0, \beta_1}{\arg\min} \frac{1}{n} \sum_{i=1}^n \big( y_i - \beta_0 - \beta_1 x_i \big)^2$$
+It is OK to not be familiar with this notation (which is about numerical optimization), but the term $y_i - \beta_0 - \beta_1 x_i$ means how $y_i$ deviates from the line you defined, $\beta_0 - \beta_1 x_i$, for subject $i$, and sum over all the squares of those residuals. You can visualize these residual terms in the following plot:
+
+```{r echo = FALSE}
+    # fitting a linear regression
+    fit = lm(Mort~ Lat, data = skincancer)
+
+    par(mar = c(4,4,0.5,0.5))
+    plot(Mort ~ Lat, data = skincancer, pch = 19, col = "deepskyblue",
+         xlab = "Latitude", ylab = "Mortality Rate")
+    
+    # the fitted regression line
+    abline(fit, col = "darkorange", lwd = 2)
+    
+    # add the residual of each observation
+    for (i in 1:nrow(skincancer)) 
+      segments(skincancer$Lat[i], fit$fitted.values[i],
+               skincancer$Lat[i], skincancer$Mort[i])
+```
+
+By altering the intercept and slope of this fitting line, we want to achieve the smallest sum of square errors. Interestingly, there is an analytic solution to this problem. The optimal parameter estimates can be calculated using the formula:
+
+$$\widehat \beta_1 = \frac{\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)}{\sum_{i=1}^n (x_i - \bar x)^2}$$
+$$\widehat \beta_0 = \bar y - \widehat \beta_1 \bar x $$
+Of course, this can be performed in `R`. 
+
+### Fitting Simple Linear Regressions
+
+The `lm()` function is already included in the base `R`. Hence, you can directly fit the model. 
+
+```{r}
+    # fitting a linear regression
+    fit = lm(Mort ~ Lat, data = skincancer)
+```
+
+Please be aware of the syntax here: 
+
+  * Usually you specify the dataset using `data =`. The data contains properly named columns. In this case, the columns are `Mort` and `Lat`. To check the names of a data, you may use `colnames()` function.
+  * The `~` sign separates the covariate on the right hand side and the outcome variable on the left hand side.
+
+Now we can check the model fitting:
+
+```{r}
+    summary(fit)
+```
+
+The summary provides many useful information:
+
+  * `Call` restates the model specification.
+  * `Residuals` is a summary of all $e_i = y_i - \hat\beta_0 - \hat\beta_1 x_i$ terms. We usually do not use them unless for model diagnostics.
+  * `Coefficients` contains all estimated parameter and their corresponding p-values (in the last column `Pr(>|t|)`) if testing if it is zero (Null hypothesis) or not (Alternative). For example, `Lat` (latitude) is a highly significant variable. Each unit increase of `Lat` would increase `Mort` by 
+  * `Residual standard error` is another summary of the residuals. Here the degrees of freedom refers to the estimation of the variance of residuals. We have seen this in the $t$-test previously. 
+  * `Multiple R-squared` measures the proportion of the variance in the response variable $Y$ of this regression model that can be explained by the predictor ($X$). It is also the squared version of a quantity called `Multiple R`, which is the Pearson correlation between the observed $Y$ values and the fitted regression line $\hat\beta_0 + \hat\beta_1 x_i$. This quantity ranges between 0 and 1, with smaller values being a very poor fitting and 1 means a perfect fitting. 
+  * `Adjusted R-squared` is a modified version of `Multiple R-squared` since this previous one will only increase as the number of variables in the model increases, regardless of whether they are useful or not. The  `Adjusted R-squared` is defined as $1 - \frac{(1-R^2)(n-1)}{n-p-1}$ which takes the number of predictors ($p$) into account. We will see more of this in the multiple linear regression part.  
+  * `F-statistic` and the associated p-value refers to an overall test of this model. This means that we are jointly testing if all of the coefficients are zero. Note that this quantity is usually highly significant because it combines the effect of all varaibles. This is related to an [ANOVA (analysis of variance)](https://en.wikipedia.org/wiki/Analysis_of_variance) which can be used to jointly test if several variables are significant overall. However, that is beyond the scope of this class. 
+
+To obtain some detailed results, you can further extract results from the fitted `R` object (`fit`). This is performed by a `$` after that. The following code shows some of them. 
+
+```{r}
+  # the fitted values
+  fit$fitted.values[1:5]
+
+  # the regression coefficients
+  fit$coefficients
+```
+
+### Predicting a New Subject
+
+With the calculated coefficients, it is very easy to predict a new subject. For example, if we are interested in a location with `Lat`$= 40$, then we would simply perform 
+
+$$389.189351 - 5.977636 \times 40 = 150.0839$$
+which predict that the mortality rate is 150.0839 per 10 million people. We can also perform this prediction using pre-defined `R` functions. However, this requires setting up a new data frame with the same structure as the training data:
+
+```{r}
+  testdata = data.frame("Lat" = 40)
+  testdata
+  predict(fit, newdata = testdata)
+```
+
+
+## Multiple Linear Regression
+
+Multiple linear regression is essentially adding more predictors. A mathematical representation is 
+
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p  + \epsilon.$$
+
+And the idea of the optimization is also similar that, we want to minimize the squared errors given a set of observed data. 
+
+$$\underset{\beta_0, \beta_1, \ldots, \beta_p}{\arg\min} \frac{1}{n} \sum_{i=1}^n \big( y_i - \beta_0 - \beta_1 x_{i1} - \beta_2 x_{i2} \cdots - \beta_2 x_{ip}\big)^2$$
+
+It is not straight forward to solve these parameters when given a set of data. This involves applications of some linear algebra:
+
+$$\widehat{\boldsymbol \beta}= (\mathbf{X}^\text{T} \mathbf{X})^{-1} \mathbf{X}^\text{T}\mathbf{y}$$
+
+This can be done using the `lm()` function. For example, if we want to include the longitude in the skin cancer data, we can specify two variables using the `+` sign in the right hand side of `~`:
+
+```{r}
+    skincancer = read.table("skin.txt", header = TRUE)
+    # fitting a multiple linear regression
+    fit = lm(Mort~ Lat + Long, data = skincancer)
+    summary(fit)
+```
+
+Most of the quantities in this output have similar meanings as a simple linear regression. Except that we have a new variable longitude. However, longitude is not a significant variable. In most cases, you could remove it from the model. 
+
+Predictions can also be made using the `predict()` function by specifying one or more data points. You can also do this by hand by simply plugging in the estimated coefficients to the linear equation. 
+
+```{r}
+  testdata = data.frame("Lat" = c(40, 45), "Long" = c(80, 100))
+  testdata
+  
+  # predict this pre-specified testing data
+  predict(fit, testdata)
+  
+  # predict the state of Illinois, which is the 12th row
+  predict(fit, skincancer[12, ])
+```
+
+### Categorical Predictors
+
+The `Ocean` variable is binary that indicates if a state is next to an ocean. We often call this type of variables (with two categories) a dummy variable, and treat them as `factor` in `R`. The following code specifies a model with a categorical variable with two levels. 
+
+```{r}
+    fit = lm(Mort~ Lat + Long + as.factor(Ocean), data = skincancer)
+    summary(fit)
+```
+
+You can notice that in the output, there is a new specification of the parameter estimate, `as.factor(Ocean)1`. This means that the parameter is for estimating the effect of `Ocean`$= 1$. You may wonder where is the effect of category 0. Since this variable has only two categories, we only need one parameter to describe its effect. When`Ocean`$= 0$, we can simply remove the contribution of this parameter. You can validate the result using the following testing data:
+
+```{r}
+  testdata = data.frame("Lat" = c(40, 40), 
+                        "Long" = c(100, 100),
+                        "Ocean" = c(0, 1))
+  testdata
+  
+  # predict and compare the two results
+  predict(fit, testdata)
+```
+
+### Specifying Higher Order Terms
+
+Sometimes a linear relationship is not sufficient to model the relationship, and we want to include higher order terms and also interactions to explain the effect. For example, we could add the squared term of latitude and the iteration between latitude and longitude to the model. 
+
+```{r}
+    fit = lm(Mort~ Lat + Long + as.factor(Ocean) + I(Lat^2) + I(Lat*Long), data = skincancer)
+    summary(fit)
+```
+
+The prediction can be done using the same dataset we specified before:
+
+```{r}
+  predict(fit, testdata)
+```
+
+Do you notice the change of significance? What do you think is the cause? Which variable(s) would you like to remove/keep?
+
+### Collinearity
+
+Collinearity refers to the situation that the covariates are (almost) linearly dependent. This is a very severe problem for linear regression. Let's look at an example where we have $Y = X_1 + X_2 + \epsilon$, and variables $X_1$ and $X_2$ are highly correlated with each other. The true parameter should be 1 and 1, respectively. Since we know the true relationship, both variables should be highly significant. However, this is not the case while we fit the regression model. Moreover, the parameter estimates become 6.36779 and -4.34668, which is awfully wrong. However, their difference is almost 2, and this model explained more than 75% of the variation. Can you think of why?
+
+```{r}
+  set.seed(1)
+  x1 = rnorm(100)
+  x2 = x1 + rnorm(100, sd = 0.01)
+  y = x1 + x2 + rnorm(100)
+  fit = lm(y~ x1 + x2)
+  summary(fit)
+```
+
+On the other hand, if we create independent covariates with exactly the same model, we see the expected results. 
+```{r}
+  set.seed(1)
+  x1 = rnorm(100)
+  x2 = rnorm(100)
+  y = x1 + x2 + rnorm(100)
+  fit = lm(y~ x1 + x2)
+  summary(fit)
+```
+
+In practice, you may want to eliminate variables with "almost the same definition", which can be highly correlated. However, this is inevitable if we have a large number of variables, i.e., $p$ is large. And eventually, when $p$ is close or larger than the sample size $n$, a linear regression model should not be used. There are several ways to handle this situation, for example, a simple strategy called the **step-wise regression** could be used. It simply adding or subtracting variables from the model one-by-one based on the p-value. When $p$ is too large, you may consider the [Ridge](https://teazrq.github.io/SMLR/ridge-regression.html) or [Lasso](https://teazrq.github.io/SMLR/lasso.html) regression.
+
+### Confunding Variables
+
+Let's imaging a relationship in which $X$ (e.g. a genetic factor) causes both $Z$ (a symptom) and $Y$ (another symptom). This can be demonstrated using the following code:
+
+```{r}
+  set.seed(1)
+  X = rnorm(100)
+  Z = X + rnorm(100, sd = 0.5)
+  Y = X + rnorm(100, sd = 0.5)
+```
+
+If we simply regress $Y$ on $Z$, we may conclude that $Z$ would increase $Y$, as $Z$ is highly significant. However, this is not really the true relationship. 
+
+```{r}
+  summary(lm(Y~Z))$coefficients
+```
+
+In this case, we should also control for the effect of $X$, and in this case, $Z$ is not significant anymore. This means, given the information of $X$, $Z$ does not affect $Y$. 
+
+```{r}
+  summary(lm(Y~Z+X))$coefficients
+```
+
+In this case, $X$ is a confounding variable. Not including appropriate confounding variables could often lead to wrong conclusions. Commonly used confounding variables are age, gender and race. However, you should always decide that based on the specific study. Here are some things to consider:
+
+  * Confounding is a causal concept and most statistical methods cannot directly claim causal effect. Whether the result you found is a causal effect should mainly relying on the domain knowledge. 
+  * Confounding variables, if included in the model, should stay there even they are not significant.

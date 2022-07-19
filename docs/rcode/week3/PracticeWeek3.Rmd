@@ -1,0 +1,88 @@
+---
+title: "Practice Questions: Multivariate Regression Models"
+author: "Ruoqing Zhu"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+  options(width = 1000)
+  knitr::opts_chunk$set(fig.width=9, fig.height=6, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(class.source = "fold-show")
+  knitr::opts_chunk$set(collapse=TRUE)
+```
+
+## Correlation
+
+1. Estimate and test the significance of the correlation between the father height and mother height in the `GaltonFamilies` dataset. Do you think the two variables are independent?
+  
+```{r class.source = NULL, eval = FALSE}
+  cor(GaltonFamilies$father, GaltonFamilies$mother)
+  cor.test(GaltonFamilies$father, GaltonFamilies$mother)
+```
+
+
+2. Read Table 1 in [Tosepu et al. (2020)](papers/Tosepu2020.pdf). Which variable is considered significantly correlated with the COVID19 cases count? What type of correlation is used in this paper? And why?
+
+## Simple Linear Regression 
+
+  1. Fit a simple linear regression that uses father's height to predict the Child's height using the `GaltonFamilies` dataset. 
+      * For each inch increase of father's height, how much inch the child is expected to increase?
+      * Is this variable significant?
+      * What is the R-squared from this model? And from this information, what is the correlation between the fitted value and the outcome?
+      * Predict a new subject with father's height being 70 inches. 
+  
+```{r class.source = NULL, eval = FALSE}
+  summary(lm(childHeight~father, data = GaltonFamilies))
+```
+  
+  2. Based on your understanding of a simple linear regression, is this model a good fitting? 
+  
+  3. Read Table 2 in [Goodings et al. (2011)](papers/Gooding2011.pdf), what is the p-value associated with food insecure when modeling BMI in females using a simple linear regression? 
+
+
+## Multiple Linear Regression 
+
+
+  1. Fit a multiple linear regression models the Child's height using the `GaltonFamilies` dataset. You should consider the following terms in your regression:
+  
+      * Father's height
+      * Mother's height
+      * An interaction between father and mother's heights
+      * Number of children in the family, as a nominal categorical variable 
+    
+```{r class.source = NULL, eval = FALSE}
+  library(HistData)
+  data(GaltonFamilies)
+  summary(lm(childHeight ~ father + mother + I(father*mother) + as.factor(children), data = GaltonFamilies))
+```
+
+  2. Do you notice any problem with this model? What could be the causes? Now, instead of defining the number of children as a nominal categorical variable, treat it as an ordinal one (continuous). What is the most significant variable in this new model?
+  
+```{r class.source = NULL, eval = FALSE}  
+  summary(lm(childHeight ~ father + mother + I(father*mother) + children, data = GaltonFamilies))
+```
+
+  3. The result still contradict with our understanding that both father and mother's heights would affect a child's height. Remove the interaction term and refit the model. What do you think is the cause of this change? Based on this model, predict a child's height if the father is 75, mother is 65 and there are 3 children in this family. 
+  
+```{r class.source = NULL, eval = FALSE} 
+  summary(lm(childHeight ~ father + mother + children, data = GaltonFamilies))
+```
+
+  4. Can you think of examples in which not including a confounding variable would cause a misleading result? 
+
+  5. Read Table 2 in [Goodings et al. (2011)](papers/Gooding2011.pdf) and contrasting Model 2 and Model 3. What could be the cause that the category `Multiethnic` parameter estimate changed quite significantly?
+
+
+
