@@ -1,5 +1,5 @@
 ---
-title: "Testing Mean Differences and Associations"
+title: "Week 2 In-class Practice"
 author: "Ruoqing Zhu"
 date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
