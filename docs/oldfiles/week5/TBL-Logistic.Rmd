@@ -1,0 +1,147 @@
+---
+title: "TBL Reading (Week 5): Logistic Regression"
+author: "Ruoqing Zhu"
+date: "Last Updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+  options(width = 1000)
+  knitr::opts_chunk$set(fig.width=9, fig.height=6, out.width = "75%", fig.align = 'center')
+  knitr::opts_chunk$set(class.source = "fold-show")
+  knitr::opts_chunk$set(collapse=TRUE)
+```
+
+## Modeling Binary Outcomes
+
+**A motivating example**. We use use the [Cleveland clinic heart disease dataset](https://www.kaggle.com/aavigan/cleveland-clinic-heart-disease-dataset) from Week 3 again. The goal this time is to model and predict a class label of whether the patient has a hearth disease or not. This is indicated by whether the `num` variable is 0 (no presence) or >0 (presence). 
+
+```{r}
+  heart = read.csv("processed_cleveland.csv")
+  heart$Y = as.factor(heart$num > 0)
+  table(heart$Y)
+```
+
+To model the 1/0 outcome, we need to set its connection with covariates. Recall in a linear regression, the outcome is continuous, and we can set 
+
+  $$Y = \beta_0 + \beta_1 X + \epsilon$$
+However, this does not work for classification since $Y$ can only be 0 or 1. Hence we turn to consider modeling the probability $P(Y = 1 | X)$. This notation is interpreted as the probability of $Y$ being 1 (e.g., the probability of have heart disease). And this is modeled by a function of $X$: 
+
+$$ P(Y = 1 | X) = \frac{\exp(\beta_0 + \beta_1 X)}{1 + \exp(\beta_0 + \beta_1 X)}$$
+This can be a tricky idea for beginners. However, here are some facts: 
+  
+  * The $\beta_0 + \beta_1 X$ part is the same as linear regression
+  * $\exp(\beta_0 + \beta_1 X)$ ranges from 0 to infinity as $X$ changes
+  * $\frac{\exp(\beta_0 + \beta_1 X)}{1 + \exp(\beta_0 + \beta_1 X)}$ will be bounded within $[0, 1]$ no matter what $X$ value we take. Hence, it is valid to represent the probability. 
+  
+## Estimating Parameters in a Logistic Regression
+
+Let's model the probability of heart disease using the `Age` variable. This can be done using the `glm()` function, which stands for Generalized Linear Model. The syntax of `glm()` is almost the same as a linear model. Note that it is important to use `family = binomial` to specify the logistic regression. 
+
+```{r}
+  logistic.fit <- glm(Y~age, data = heart, family = binomial)
+  summary(logistic.fit)
+```
+The result is similar to a linear regression, with some differences:
+
+  * The parameter estimate of age is 0.05199. It is positive, meaning that increasing age would increase the change of having heart disease. However, this does not mean that 1 year older would increase the change by 0.05. Since by our previous formula, the probably is not directly expressed as $\beta_0 + \beta_1 X$. Instead, it is some nonlinear function of $\beta_0 + \beta_1 X$.
+  * The age variable is significant. This interpretation is the same as a linear regression
+  * We do not have quantities such as R square. Since the model does not try to explain the variance of $Y$. 
+  
+## Predicting a New Target Point
+
+Let's consider a new subject with `Age = 55`. What is the predicted probability of heart disease? Based on our formula, we have 
+
+$$\beta_0 + \beta_1 X = -3.00591 + 0.05199 \times 55 = -0.14646$$
+And the estimated probability is 
+
+$$ P(Y = 1 | X) = \frac{\exp(\beta_0 + \beta_1 X)}{1 + \exp(\beta_0 + \beta_1 X)} = \frac{\exp(-0.14646)}{1 + \exp(-0.14646)} = 0.4634503$$
+Hence, the estimated probability for this subject is 46.3%. This can be done using R code. Please note that if you want to predict the probability, you need to specify `type = "response"`. Otherwise, only $\beta_0 + \beta_1 X$ is provided.
+
+```{r}
+  testdata = data.frame("age" = 55)
+  predict(logistic.fit, newdata = testdata)
+  predict(logistic.fit, newdata = testdata, type = "response")
+```
+
+__Remark:__ Although our estimation shows that the predicted probability is 46%, but this doesn't mean that the probability of heart disease of a 55 year old person would be around 46%. This is because we do not have the data from the entire population. Our data is collected from the ones that were referred for coronary arteriography ([Detrano et al, (1984)](https://www.ahajournals.org/doi/pdf/10.1161/01.CIR.69.3.541)). Hence we are analyzing a sub-population of high risk individuals! Hence the validity of the predicted probability relies heavily on the quality of the data and the study design. This is the same the running a linear regression. 
+
+## Interpretation of the Parameters
+
+Recall that we learned the Odds Ratio from a contingency table. Let's consider __calculating the odds__ based on the probability of $Y = 1$ given $X$. Let's denote this as $p$, then we have 
+
+$$
+\begin{aligned}
+p &= \frac{\exp(\beta_0 + \beta_1 X)}{1 + \exp(\beta_0 + \beta_1 X)}\\
+1 - p &= \frac{1}{1 + \exp(\beta_0 + \beta_1 X)} \\
+\text{Odds} = \frac{p}{1-p} &= \exp(\beta_0 + \beta_1 X)
+\end{aligned}
+$$
+Now, how about odds ratio? That would require us to consider two groups. Let's define the following two, with some arbitrary age value $a$:
+
+  * Subjects with `age` $= a$
+  * Subjects with `age` $= a + 1$
+  
+By the definition of the odds ratio, we would have 
+
+$$
+\begin{aligned}
+\text{Odds Ratio} &= \frac{\text{Odds in Group 2}}{\text{Odds in Group 1}}\\
+&= \frac{\exp(\beta_0 + \beta_1 (a+1))}{\exp(\beta_0 + \beta_1 a)}\\
+&= \frac{\exp(\beta_0 + \beta_1 a) \times \exp(\beta_1)}{\exp(\beta_0 + \beta_1 a)}\\
+&= \exp(\beta_1)
+\end{aligned}
+$$
+Taking log on both sides, we have 
+
+$$\log(\text{Odds Ratio}) = \beta_1$$
+
+Hence, the odds ratio between these two groups (__they differ only with one unit of `age`__) can be directly interpreted as the exponential of the parameter of `age`. After taking the log, we can also say that 
+
+> The parameter $\beta$ of a varaible in a logistic regression represents the __log of odds ratio__ associated with this variable. 
+
+Please note that we usually do not be explicit about what this odds ratio is about (what two groups is it comparing). However, based on our previous calculation, this odds ratio is referring to the two groups defined with one unit different in terms of this variable that we are interested in, and identical in terms of all other variables. 
+
+## Dealing with Categorical Predictors and Their Interactions
+
+Similar to the examples we showed in the regression session, categorical variables are also commonly used in a logistic regression. Furthermore, it is very common to use an interaction term of these variables. The following example considers two binary predictors: `sex` and `fbs` (fasting blood sugar > 120), and their interactions.
+
+```{r}
+  logistic.fit <- glm(Y~ as.factor(sex) + as.factor(fbs) + as.factor(I(sex*fbs)), data = heart, family = binomial)
+  summary(logistic.fit)
+```
+
+How to interpret the results? We have to calculate the values associated with each setting: 
+
+  * If both `sex` = 0 and `fbs` = 0, then their product is also 0. Hence the predicted link ($\beta X$ part) is only the intercept term -1.2452. And the predicted probability is $\frac{\exp(-1.2452)}{1 + \exp(-1.2452)} = 0.2235321$.
+  * If `sex` = 1 and `fbs` = 0, then their product is 0. The predicted link is -1.2452 + 1.5127 = 0.2675 (intercept + effect of `sex`). And the predicted probability is $\frac{\exp(0.2675)}{1 + \exp(0.2675)} = 0.5664791$.
+  * If `sex` = 0 and `fbs` = 1, then their product is still 0. The predicted link is -1.2452 + 1.2452 = 0(intercept + effect of `fbs`). And the predicted probability is 0.5.
+  * Only when both `sex` and `fbs` are 1, their product is 1. The predicted link is -1.2452 + 1.5127 + 1.2452 -1.5733 = -0.0606. And the predicted probability is 0.4848546
+
+We can validate the result using the following code:
+
+```{r}
+  newdata = data.frame("sex" = c(0, 1, 0, 1), "fbs" = c(0, 0, 1, 1))
+  predict(logistic.fit, newdata = newdata, type = "response")
+```
+For continuous variables and their iterations, we can follow the same logic to calculate the predicted probability. Try the practice question yourself. 
+
+## Practice Questions 
+
+[O'Brien et al. (2020)](papers/OBrien2020Misplaced.pdf) is a psychology study that analyze the participant's behavior of disseminating false claims (pseudoscience). This is formatted as a binary outcome variable, with value 1 as disseminating a false claims. Furthermore, the authors considered variables such as `Trust` (trust in science, ranging from 1 to 5, see section 5.3), `Literacy` is a continuous variable that reflex the understanding of scientific methodology (ranging from 0 to 8, see section 5.3), scientific content is an binary variable that indicate if the article provided to the participant contains scientific information. Read Table 1 and experiment 1 (the results in the first 8 rows), and the reduced model (four columns on the right hand side). The column `B` contains the parameter estimate. 
+
+  * Consider a new participant with `Trust` = 4, `Literacy` = 6 and is reading a material with scientific content. What is the probability that this participant disseminate this false information?
+  * Is this participant more likely to disseminate this information if its is not a scientific content?
+
+  

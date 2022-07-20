@@ -29,6 +29,23 @@ output:
   + Download [`r xfun::embed_file('docs/rcode/week3/PracticeWeek3.Rmd', text = 'week 3 practice .rmd file')`]
   + Download the [skin cancer Dataset](data/skin.txt){target='_blank'} in `.txt` format
 
+## Additional Reading
+
+  + Logistic Regression
+    + [[Relative Risk](rcode/week3/RR.html){target='_blank'}]
+    + [[Odds Ratio](rcode/week3/OR.html){target='_blank'}]
+    + [[Logistic Regression](rcode/week3/Logistic.html){target='_blank'}]
+    + [[Model Evaluation](rcode/week3/ModelEvaluation.html){target='_blank'}]
+    + Use the [Cleveland Clinic Heart Disease Dataset](rcode/week2/processed_cleveland.csv){target='_blank'} from Week 2
+  + [[Survival Analysis](rcode/week3/SurvivalAnalysis.html){target='_blank'}]
+
 ## Homework
 
   + Sections 5.7 from the BPS textbook
+  
+  
+  
+  
+  
+  
+  
