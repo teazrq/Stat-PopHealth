@@ -217,7 +217,7 @@ Use the `pbc` data to perform the following tasks:
   summary(pbcfit)
   
   pbcfit <- coxph(Surv(time, censor) ~ age + trt + sex + age*trt, data = pbc)
-  summary(pbcfit)  
+  summary(pbcfit)
 ```
 
 
